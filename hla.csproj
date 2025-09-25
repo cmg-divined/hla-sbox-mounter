@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Sandbox.Mounting.hla</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>netcoreapp9.0</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>12.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup />
+	<ItemGroup>
+	  <Reference Include="Sandbox.System">
+		<HintPath>C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed\Sandbox.System.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Sandbox.Mounting">
+		<HintPath>C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed\Sandbox.Mounting.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Sandbox.Engine">
+		<HintPath>C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed\Sandbox.Engine.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Sandbox.Filesystem">
+		<HintPath>C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed\Sandbox.Filesystem.dll</HintPath>
+	  </Reference>
+	  <Reference Include="SkiaSharp">
+		<HintPath>C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed\SkiaSharp.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+</Project>
