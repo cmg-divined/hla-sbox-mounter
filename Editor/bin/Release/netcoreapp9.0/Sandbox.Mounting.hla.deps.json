@@ -1,0 +1,801 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "Sandbox.Mounting.hla/1.0.0": {
+        "dependencies": {
+          "Sandbox.Engine": "1.0.1.0",
+          "Sandbox.Filesystem": "1.0.1.0",
+          "Sandbox.Mounting": "1.0.1.0",
+          "Sandbox.System": "1.0.1.0",
+          "SkiaSharp": "3.116.0.0"
+        },
+        "runtime": {
+          "Sandbox.Mounting.hla.dll": {}
+        }
+      },
+      "Sandbox.Engine/1.0.1.0": {
+        "runtime": {
+          "Sandbox.Engine.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
+      "Sandbox.Filesystem/1.0.1.0": {
+        "runtime": {
+          "Sandbox.Filesystem.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
+      "Sandbox.Mounting/1.0.1.0": {
+        "runtime": {
+          "Sandbox.Mounting.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
+      "Sandbox.System/1.0.1.0": {
+        "runtime": {
+          "Sandbox.System.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
+      "SkiaSharp/3.116.0.0": {
+        "runtime": {
+          "SkiaSharp.dll": {
+            "assemblyVersion": "3.116.0.0",
+            "fileVersion": "3.116.0.0"
+          }
+        }
+      },
+      "Facepunch.ActionGraphs/1.0.0.0": {
+        "runtime": {
+          "Facepunch.ActionGraphs.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.9.22.0"
+          }
+        }
+      },
+      "Humanizer/2.14.0.0": {
+        "runtime": {
+          "Humanizer.dll": {
+            "assemblyVersion": "2.14.0.0",
+            "fileVersion": "2.14.1.48190"
+          }
+        }
+      },
+      "NLog/5.0.0.0": {
+        "runtime": {
+          "NLog.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.3.4.2778"
+          }
+        }
+      },
+      "Sandbox.Reflection/1.0.1.0": {
+        "runtime": {
+          "Sandbox.Reflection.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
+      "Microsoft.Extensions.Caching.Memory/9.0.0.0": {
+        "runtime": {
+          "Microsoft.Extensions.Caching.Memory.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
+      "Microsoft.Extensions.Caching.Abstractions/9.0.0.0": {
+        "runtime": {
+          "Microsoft.Extensions.Caching.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
+      "Svg.Custom/2.0.0.4": {
+        "runtime": {
+          "Svg.Custom.dll": {
+            "assemblyVersion": "2.0.0.4",
+            "fileVersion": "2.0.0.4"
+          }
+        }
+      },
+      "Svg.Skia/2.0.0.4": {
+        "runtime": {
+          "Svg.Skia.dll": {
+            "assemblyVersion": "2.0.0.4",
+            "fileVersion": "2.0.0.4"
+          }
+        }
+      },
+      "Sandbox.Services/1.0.6.0": {
+        "runtime": {
+          "Sandbox.Services.dll": {
+            "assemblyVersion": "1.0.6.0",
+            "fileVersion": "1.0.6.0"
+          }
+        }
+      },
+      "Refit/8.0.0.0": {
+        "runtime": {
+          "Refit.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.0.1"
+          }
+        }
+      },
+      "Sentry/4.13.0.0": {
+        "runtime": {
+          "Sentry.dll": {
+            "assemblyVersion": "4.13.0.0",
+            "fileVersion": "4.13.0.0"
+          }
+        }
+      },
+      "Sandbox.Compiling/1.0.1.0": {
+        "runtime": {
+          "Sandbox.Compiling.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
+      "Sandbox.Access/1.0.1.0": {
+        "runtime": {
+          "Sandbox.Access.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
+      "Sandbox.Hotload/0.1.0.0": {
+        "runtime": {
+          "Sandbox.Hotload.dll": {
+            "assemblyVersion": "0.1.0.0",
+            "fileVersion": "0.1.0.0"
+          }
+        }
+      },
+      "Microsoft.CodeAnalysis/4.14.0.0": {
+        "runtime": {
+          "Microsoft.CodeAnalysis.dll": {
+            "assemblyVersion": "4.14.0.0",
+            "fileVersion": "4.1400.25.26210"
+          }
+        },
+        "resources": {
+          "cs/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "cs"
+          },
+          "de/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "de"
+          },
+          "es/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "es"
+          },
+          "fr/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "fr"
+          },
+          "it/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "it"
+          },
+          "ja/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "ja"
+          },
+          "ko/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "ko"
+          },
+          "pl/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "pl"
+          },
+          "pt-BR/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "pt-BR"
+          },
+          "ru/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "ru"
+          },
+          "tr/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "tr"
+          },
+          "zh-Hans/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "zh-Hans"
+          },
+          "zh-Hant/Microsoft.CodeAnalysis.resources.dll": {
+            "locale": "zh-Hant"
+          }
+        }
+      },
+      "Zio/0.19.0.0": {
+        "runtime": {
+          "Zio.dll": {
+            "assemblyVersion": "0.19.0.0",
+            "fileVersion": "0.19.2.0"
+          }
+        }
+      },
+      "Mono.Cecil/0.11.6.0": {
+        "runtime": {
+          "Mono.Cecil.dll": {
+            "assemblyVersion": "0.11.6.0",
+            "fileVersion": "0.11.6.0"
+          }
+        }
+      },
+      "Sandbox.SolutionGenerator/1.0.1.0": {
+        "runtime": {
+          "Sandbox.SolutionGenerator.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
+      "Topten.RichTextKit/1.0.0.0": {
+        "runtime": {
+          "Topten.RichTextKit.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Sandbox.Event/1.0.1.0": {
+        "runtime": {
+          "Sandbox.Event.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        }
+      },
+      "ShimSkiaSharp/2.0.0.4": {
+        "runtime": {
+          "ShimSkiaSharp.dll": {
+            "assemblyVersion": "2.0.0.4",
+            "fileVersion": "2.0.0.4"
+          }
+        }
+      },
+      "Svg.Model/2.0.0.4": {
+        "runtime": {
+          "Svg.Model.dll": {
+            "assemblyVersion": "2.0.0.4",
+            "fileVersion": "2.0.0.4"
+          }
+        }
+      },
+      "K4os.Compression.LZ4.Streams/1.3.8.0": {
+        "runtime": {
+          "K4os.Compression.LZ4.Streams.dll": {
+            "assemblyVersion": "1.3.8.0",
+            "fileVersion": "1.3.8.0"
+          }
+        }
+      },
+      "System.Speech/4.0.0.0": {
+        "runtime": {
+          "System.Speech.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "6.0.21.52210"
+          }
+        }
+      },
+      "Azure.Messaging.WebPubSub.Client/1.0.0.0": {
+        "runtime": {
+          "Azure.Messaging.WebPubSub.Client.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.24.5102"
+          }
+        }
+      },
+      "Microsoft.Extensions.Options/9.0.0.0": {
+        "runtime": {
+          "Microsoft.Extensions.Options.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
+      "LiteDB/5.0.21.0": {
+        "runtime": {
+          "LiteDB.dll": {
+            "assemblyVersion": "5.0.21.0",
+            "fileVersion": "5.0.21.0"
+          }
+        }
+      },
+      "K4os.Compression.LZ4/1.3.8.0": {
+        "runtime": {
+          "K4os.Compression.LZ4.dll": {
+            "assemblyVersion": "1.3.8.0",
+            "fileVersion": "1.3.8.0"
+          }
+        }
+      },
+      "MonoMod.Utils/25.0.8.0": {
+        "runtime": {
+          "MonoMod.Utils.dll": {
+            "assemblyVersion": "25.0.8.0",
+            "fileVersion": "25.0.8.0"
+          }
+        }
+      },
+      "System.Memory.Data/1.0.2.0": {
+        "runtime": {
+          "System.Memory.Data.dll": {
+            "assemblyVersion": "1.0.2.0",
+            "fileVersion": "1.0.221.20802"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0.0": {
+        "runtime": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/9.0.0.0": {
+        "runtime": {
+          "Microsoft.Extensions.Logging.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
+      "Microsoft.Extensions.Primitives/9.0.0.0": {
+        "runtime": {
+          "Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
+      "ExCSS/4.2.3.0": {
+        "runtime": {
+          "ExCSS.dll": {
+            "assemblyVersion": "4.2.3.0",
+            "fileVersion": "4.2.3.0"
+          }
+        }
+      },
+      "protobuf-net.Core/3.0.0.0": {
+        "runtime": {
+          "protobuf-net.Core.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.2.45.36865"
+          }
+        }
+      },
+      "protobuf-net/3.0.0.0": {
+        "runtime": {
+          "protobuf-net.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.2.45.36865"
+          }
+        }
+      },
+      "Microsoft.CodeAnalysis.CSharp/4.14.0.0": {
+        "runtime": {
+          "Microsoft.CodeAnalysis.CSharp.dll": {
+            "assemblyVersion": "4.14.0.0",
+            "fileVersion": "4.1400.25.26210"
+          }
+        },
+        "resources": {
+          "cs/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "cs"
+          },
+          "de/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "de"
+          },
+          "es/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "es"
+          },
+          "fr/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "fr"
+          },
+          "it/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "it"
+          },
+          "ja/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "ja"
+          },
+          "ko/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "ko"
+          },
+          "pl/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "pl"
+          },
+          "pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "pt-BR"
+          },
+          "ru/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "ru"
+          },
+          "tr/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "tr"
+          },
+          "zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "zh-Hans"
+          },
+          "zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll": {
+            "locale": "zh-Hant"
+          }
+        }
+      },
+      "Sandbox.Generator/1.0.0.0": {
+        "runtime": {
+          "Sandbox.Generator.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Mono.Cecil.Rocks/0.11.6.0": {
+        "runtime": {
+          "Mono.Cecil.Rocks.dll": {
+            "assemblyVersion": "0.11.6.0",
+            "fileVersion": "0.11.6.0"
+          }
+        }
+      },
+      "MonoMod.Core/1.2.3.0": {
+        "runtime": {
+          "MonoMod.Core.dll": {
+            "assemblyVersion": "1.2.3.0",
+            "fileVersion": "1.2.3.0"
+          }
+        }
+      },
+      "System.CodeDom/9.0.0.0": {
+        "runtime": {
+          "System.CodeDom.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.525.21509"
+          }
+        }
+      },
+      "HarfBuzzSharp/1.0.0.0": {
+        "runtime": {
+          "HarfBuzzSharp.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "8.3.0.0"
+          }
+        }
+      },
+      "K4os.Hash.xxHash/1.0.8.0": {
+        "runtime": {
+          "K4os.Hash.xxHash.dll": {
+            "assemblyVersion": "1.0.8.0",
+            "fileVersion": "1.0.8.0"
+          }
+        }
+      },
+      "Azure.Core/1.36.0.0": {
+        "runtime": {
+          "Azure.Core.dll": {
+            "assemblyVersion": "1.36.0.0",
+            "fileVersion": "1.3600.23.56006"
+          }
+        }
+      },
+      "Microsoft.Bcl.AsyncInterfaces/1.0.0.0": {
+        "runtime": {
+          "Microsoft.Bcl.AsyncInterfaces.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "4.700.20.21406"
+          }
+        }
+      },
+      "MonoMod.ILHelpers/1.1.0.0": {
+        "runtime": {
+          "MonoMod.ILHelpers.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "MonoMod.Backports/1.1.2.0": {
+        "runtime": {
+          "MonoMod.Backports.dll": {
+            "assemblyVersion": "1.1.2.0",
+            "fileVersion": "1.1.2.0"
+          }
+        }
+      },
+      "MonoMod.Iced/1.21.0.0": {
+        "runtime": {
+          "MonoMod.Iced.dll": {
+            "assemblyVersion": "1.21.0.0",
+            "fileVersion": "1.21.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Sandbox.Mounting.hla/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.Engine/1.0.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.Filesystem/1.0.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.Mounting/1.0.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.System/1.0.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SkiaSharp/3.116.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Facepunch.ActionGraphs/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Humanizer/2.14.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NLog/5.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.Reflection/1.0.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Extensions.Caching.Memory/9.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Extensions.Caching.Abstractions/9.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Svg.Custom/2.0.0.4": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Svg.Skia/2.0.0.4": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.Services/1.0.6.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Refit/8.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sentry/4.13.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.Compiling/1.0.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.Access/1.0.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.Hotload/0.1.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.CodeAnalysis/4.14.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Zio/0.19.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Mono.Cecil/0.11.6.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.SolutionGenerator/1.0.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Topten.RichTextKit/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.Event/1.0.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ShimSkiaSharp/2.0.0.4": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Svg.Model/2.0.0.4": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "K4os.Compression.LZ4.Streams/1.3.8.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "System.Speech/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Azure.Messaging.WebPubSub.Client/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Extensions.Options/9.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LiteDB/5.0.21.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "K4os.Compression.LZ4/1.3.8.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MonoMod.Utils/25.0.8.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "System.Memory.Data/1.0.2.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Extensions.Logging.Abstractions/9.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Extensions.Primitives/9.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ExCSS/4.2.3.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "protobuf-net.Core/3.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "protobuf-net/3.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.CodeAnalysis.CSharp/4.14.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Sandbox.Generator/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Mono.Cecil.Rocks/0.11.6.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MonoMod.Core/1.2.3.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "System.CodeDom/9.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "HarfBuzzSharp/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "K4os.Hash.xxHash/1.0.8.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Azure.Core/1.36.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Bcl.AsyncInterfaces/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MonoMod.ILHelpers/1.1.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MonoMod.Backports/1.1.2.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MonoMod.Iced/1.21.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

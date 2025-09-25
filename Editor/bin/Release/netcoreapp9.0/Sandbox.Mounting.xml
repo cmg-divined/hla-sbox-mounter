@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sandbox.Mounting</name>
+    </assembly>
+    <members>
+        <member name="T:Sandbox.Mounting.ResourceLoader">
+            <summary>
+            A class responsible for loading a single resource. It will cache the result inside.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Mounting.ResourceLoader.Type">
+            <summary>
+            The type of resource this file can provide.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Mounting.ResourceLoader.Path">
+            <summary>
+            The path to the asset
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.ResourceLoader.GetOrCreate">
+            <summary>
+            Should be implemented to load a specific type
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.ResourceLoader.LoadAsync">
+            <summary>
+            Should be implemented to load a specific type
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.ResourceLoader.Load">
+            <summary>
+            Should be implemented to load a specific type
+            </summary>
+        </member>
+        <member name="T:Sandbox.Mounting.ResourceType">
+            <summary>
+            What resource can come out of this file
+            </summary>
+        </member>
+        <member name="T:Sandbox.Mounting.BaseGameMount">
+            <summary>
+            The base class for all mounts. Your mount should implement the abstract methods from this class.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Mounting.BaseGameMount.IsInstalled">
+            <summary>
+            True if this source is installed on the system and can be mounted.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Mounting.BaseGameMount.IsMounted">
+            <summary>
+            True if this is currently active and mounted
+            </summary>
+        </member>
+        <member name="P:Sandbox.Mounting.BaseGameMount.Ident">
+            <summary>
+            A short, lowercase string that will be used to uniquely identify this asset source
+            ie "rust"
+            </summary>
+        </member>
+        <member name="P:Sandbox.Mounting.BaseGameMount.Title">
+            <summary>
+            The display name of the game this mounts, ie "Rust"
+            </summary>
+        </member>
+        <member name="P:Sandbox.Mounting.BaseGameMount.Log">
+            <summary>
+            Allows logging for this specific asset source
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.BaseGameMount.Initialize(Sandbox.Mounting.InitializeContext)">
+            <summary>
+            Called on startup, in parallel with other sources. Use this to check for the presence of the game on disk and
+            set the IsInstalled property if it is.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.BaseGameMount.Mount(Sandbox.Mounting.MountContext)">
+            <summary>
+            Try to mount. Should set Mounted to true if success.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.BaseGameMount.Shutdown">
+            <summary>
+            Called on destroy, if you have any files open, now is the time to close them.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Mounting.BaseGameMount.Resources">
+            <summary>
+            All of the resources in this game
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.BaseGameMount.RefreshInternal">
+            <summary>
+            Unmount and re-mount the source. Used during development to update the files.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.InitializeContext.IsAppInstalled(System.Int64)">
+            <summary>
+            Return true if this app is installed on Steam
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.InitializeContext.GetAppDirectory(System.Int64)">
+            <summary>
+            If this app is installed we'll return the folder in which it is installed
+            </summary>
+        </member>
+        <member name="T:Sandbox.Mounting.MountHost">
+            <summary>
+            Holds all of the AssetSource systems and acts as a single access point.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.MountHost.GetSource(System.String)">
+            <summary>
+            Get an asset source by its ident
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.MountHost.Mount(System.String)">
+            <summary>
+            Mount this asset source
+            </summary>
+        </member>
+        <member name="M:Sandbox.Mounting.MountHost.Unmount(System.String)">
+            <summary>
+            Mount this asset source
+            </summary>
+        </member>
+    </members>
+</doc>

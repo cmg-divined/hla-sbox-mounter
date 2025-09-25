@@ -1,0 +1,876 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sandbox.Hotload</name>
+    </assembly>
+    <members>
+        <member name="T:Sandbox.Hotload">
+            <summary>
+            Provides methods for replacing loaded assemblies with new versions at runtime.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.TryGetDefaultValue(System.Reflection.FieldInfo,System.Object@)">
+            <summary>
+            Attempts to get the default value for a newly created field on an
+            existing type. Returns true if successful.
+            </summary>
+            <remarks>
+            This value should not be cached, but evaluated for each instance.
+            Works by finding the CIL that initializes the given field and
+            generating a dynamic method, which is then cached and invoked.
+            </remarks>
+            <param name="field">Field to retrieve a default value for.</param>
+            <param name="value">If successful, contains the default value.</param>
+        </member>
+        <member name="F:Sandbox.Hotload.StackBehaviourValues">
+            <summary>
+            Stack size delta for each stack behaviour.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.GetArgCount(Mono.Cecil.Cil.OpCode,Mono.Cecil.MethodReference)">
+            <summary>
+            Find the number of arguments that invoking the given method will pop.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.GetArgCount(Mono.Cecil.Cil.OpCode,System.Reflection.MethodBase)">
+            <summary>
+            Find the number of arguments that invoking the given method will pop.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Hotload.AnonymousTypeInfo">
+            <summary>
+            Anonymous types are generic types with a type parameter for each property's type.
+            That means the compiler will reuse the same type definition as long as property names match.
+            </summary>
+            <param name="Type">Generic type definition for the anonymous type.</param>
+            <param name="PropertyNames">Names of the anonymous type's properties.</param>
+        </member>
+        <member name="M:Sandbox.Hotload.AnonymousTypeInfo.#ctor(System.Type,System.Collections.Immutable.ImmutableArray{System.String})">
+            <summary>
+            Anonymous types are generic types with a type parameter for each property's type.
+            That means the compiler will reuse the same type definition as long as property names match.
+            </summary>
+            <param name="Type">Generic type definition for the anonymous type.</param>
+            <param name="PropertyNames">Names of the anonymous type's properties.</param>
+        </member>
+        <member name="P:Sandbox.Hotload.AnonymousTypeInfo.Type">
+            <summary>Generic type definition for the anonymous type.</summary>
+        </member>
+        <member name="P:Sandbox.Hotload.AnonymousTypeInfo.PropertyNames">
+            <summary>Names of the anonymous type's properties.</summary>
+        </member>
+        <member name="M:Sandbox.Hotload.AnonymousTypeInfo.HasMatchingPropertyNames(Sandbox.Hotload.AnonymousTypeInfo)">
+            <summary>
+            Anonymous types are equivalent as long as the property names match.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Hotload.AnonymousTypeParamNameRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>^&lt;(?&lt;name&gt;[^&gt;]+)&gt;j__TPar$</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match if at the beginning of the string.<br/>
+            ○ Match '&lt;'.<br/>
+            ○ "name" capture group.<br/>
+                ○ Match a character other than '&gt;' atomically at least once.<br/>
+            ○ Match the string "&gt;j__TPar".<br/>
+            ○ Match if at the end of the string or if before an ending newline.<br/>
+            </code>
+            </remarks>
+        </member>
+        <member name="M:Sandbox.Hotload.GetAnonymousTypeInfo(System.Type)">
+            <summary>
+            If <paramref name="type"/> is an anonymous type, gets a description of its properties.
+            Otherwise, returns null.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.GetNewAnonymousType(System.Type)">
+            <summary>
+            Find an anonymous type in a hotloaded assembly with matching property names, or null if not found.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Hotload.Swaps">
+            <summary>
+            A mapping of assembles to swap with new versions.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Hotload.New">
+            <summary>
+            Assemblies that are being loaded in this hotload, either as a swap or replacing null.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Hotload.IgnoredAssemblies">
+            <summary>
+            A list of assemblies containing members that should be skipped during a reference update.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Hotload.TraceRoots">
+            <summary>
+            If true, the static field or watched object that instances are found under will be stored in <see cref="P:Sandbox.InstanceTimingEntry.Roots"/>.
+            Defaults to false.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Hotload.TracePaths">
+            <summary>
+            If true, keep track of the path to instances to include in logging. Defaults to false.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Hotload.IncludeTypeTimings">
+            <summary>
+            If true, record per-type timing information.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Hotload.IncludeProcessorTimings">
+            <summary>
+            If true, record instance processor timing information.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Hotload.AssemblyResolver">
+            <summary>
+            Optional resolver required for features like setting default values of newly-added fields.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Hotload.AssemblyNameFormatter">
+            <summary>
+            Optional formatter when pretty-printing assembly names in logs.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.#ctor(System.Boolean,Sandbox.Diagnostics.Logger)">
+            <summary>
+            Default constructor that includes Sandbox.Hotload.dll and Mono.Cecil.dll to the
+            ignored assembly list.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.IgnoreAssembly(System.Reflection.Assembly)">
+            <summary>
+            Any fields declared on types defined in the given assembly will be skipped
+            during future reference updates.
+            </summary>
+            <param name="toIgnore">Assembly to ignore the members of.</param>
+        </member>
+        <member name="M:Sandbox.Hotload.IgnoreAssembly``1">
+            <summary>
+            Any fields declared on types defined in the given assembly will be skipped
+            during future reference updates.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.IgnoreAssembly(System.String)">
+            <summary>
+            Any fields declared on types defined in the named assembly will be skipped
+            during future reference updates.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.ReplacingAssembly(System.Reflection.Assembly,System.Reflection.Assembly)">
+             <summary>
+             To be called when one assembly is being replaced by another, is loaded for the first time,
+             or unloaded for the last time.
+            
+             This will add <paramref name="newAssembly"/> to be watched (if not null), and remove
+             <paramref name="oldAssembly"/> from being watched (if not null). If both assemblies aren't
+             null, they will be added to be swapped when <see cref="M:Sandbox.Hotload.UpdateReferences"/> is next called, and
+             true is returned.
+             </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.GetQueuedAssemblyReplacements">
+            <summary>
+            Returns the queue of assemblies that will be swapped when
+            <see cref="M:Sandbox.Hotload.UpdateReferences"/> is called. These are added using the
+            <see cref="M:Sandbox.Hotload.ReplacingAssembly(System.Reflection.Assembly,System.Reflection.Assembly)"/> method.
+            </summary>
+            <returns>The mapping of assembly replacements.</returns>
+        </member>
+        <member name="T:Sandbox.Hotload.IInstanceUpgrader">
+             <summary>
+             Interface to implement a custom object instance upgrade process for types that match a condition.
+             Instances of any derived types will be created and added to a <see cref="T:Sandbox.Hotload"/> instance that uses
+             <see cref="M:Sandbox.Hotload.AddUpgraders(System.Reflection.Assembly)"/> on the declaring assembly of the derived type, unless a
+             <see cref="T:Sandbox.Upgraders.DisableAutoCreationAttribute"/> has been specified.
+            
+             You can configure which order <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/>s are queried by using <see cref="T:Sandbox.Upgraders.UpgraderGroupAttribute"/>,
+             <see cref="T:Sandbox.Upgraders.AttemptBeforeAttribute"/> and / or <see cref="T:Sandbox.Upgraders.AttemptAfterAttribute"/>.
+             </summary>
+        </member>
+        <member name="P:Sandbox.Hotload.InstanceUpgrader.Swaps">
+            <summary>
+            A mapping of assembles to swap with new versions.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.InstanceUpgrader.GetNewType(System.Type)">
+            <summary>
+            When hotswapping this will switch types from the old assembly into the type from the new assembly.
+            </summary>
+            <param name="oldType">The old type.</param>
+            <returns>The new type, or null if no substitution exists. The old type will be returned if it's still valid (not from a swapped assembly).</returns>
+        </member>
+        <member name="M:Sandbox.Hotload.InstanceUpgrader.GetNewInstance(System.Object)">
+            <summary>
+            Returns an upgraded version of the given object, replacing any types from a swapped-out
+            assembly with their new up-to-date types. The result is cached, so if you pass the same
+            object to this method multiple times it will always return the same instance. Fields inside
+            the new instance may not be initialized until later in the hotload.
+            </summary>
+            <param name="oldInstance">Object to upgrade.</param>
+            <returns>An upgraded version of the given object.</returns>
+        </member>
+        <member name="M:Sandbox.Hotload.InstanceUpgrader.Log(Sandbox.HotloadEntryType,System.FormattableString,System.Reflection.MemberInfo)">
+            <summary>
+            Logs a message in the current hotload.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.InstanceUpgrader.Log(System.Exception,System.FormattableString,System.Reflection.MemberInfo)">
+            <summary>
+            Logs an exception in the current hotload.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.InstanceUpgrader.OnInitialize">
+            <summary>
+            Called when this upgrader has been added to a <see cref="F:Sandbox.Hotload.InstanceUpgrader.Hotload"/> instance.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.InstanceUpgrader.OnClearCache">
+            <summary>
+            Called between hotloads, should clear up any cached resources that won't be needed in future hotloads.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.InstanceUpgrader.ShouldProcessType(System.Type)">
+            <summary>
+            Check to see if this upgrader can possibly handle the given type.
+            </summary>
+            <param name="type">Type to upgrade an instance of.</param>
+            <returns>True if this upgrader should attempt to upgrade an instance of the given type.</returns>
+        </member>
+        <member name="M:Sandbox.Hotload.InstanceUpgrader.OnTryCreateNewInstance(System.Object,System.Object@)">
+            <summary>
+            If this upgrader supports upgrading the given <paramref name="oldInstance"/>, returns <value>true</value> and
+            assigns <paramref name="newInstance"/> to be the value that should replace <paramref name="oldInstance"/>. This
+            method doesn't need to copy the inner state of the instance across, but just creates an empty instance to be
+            populated later.
+            </summary>
+            <remarks>
+            <para>
+            It's safe to just directly assign <paramref name="newInstance"/> to <paramref name="oldInstance"/> if the type
+            isn't declared in a replaced assembly.
+            </para>
+            <para>
+            Returning true will cause <see cref="M:Sandbox.Hotload.InstanceUpgrader.OnTryUpgradeInstance(System.Object,System.Object,System.Boolean)"/> to be called immediately after this method, which
+            schedules copying the state of the old instance to the new one.
+            </para>
+            </remarks>
+            <param name="oldInstance">Instance that should be replaced / upgraded.</param>
+            <param name="newInstance">
+            If this method returns true, this should contain the instance that replaces <paramref name="oldInstance"/>,
+            or <paramref name="oldInstance"/> itself if no replacement is necessary.
+            </param>
+            <returns>True if this upgrader handles the replacement of the given <paramref name="oldInstance"/>.</returns>
+        </member>
+        <member name="M:Sandbox.Hotload.InstanceUpgrader.OnTryUpgradeInstance(System.Object,System.Object,System.Boolean)">
+            <summary>
+            Called immediately after <see cref="M:Sandbox.Hotload.InstanceUpgrader.OnTryCreateNewInstance(System.Object,System.Object@)"/> if it returned true, or on instances from fields
+            that can't be re-assigned (see <see cref="P:System.Reflection.FieldInfo.IsInitOnly"/>). This method determines what kind of extra
+            processing is required for the given replacement.
+            </summary>
+            <remarks>
+            <para>
+            In this method we can call things like <see cref="M:Sandbox.Hotload.InstanceUpgrader.ProcessInstance(System.Object,System.Object)"/>, <see cref="M:Sandbox.Hotload.ScheduleInstanceTask(Sandbox.Hotload.IInstanceProcessor,System.Object,System.Object)"/> or
+            <see cref="M:Sandbox.Hotload.ScheduleLateInstanceTask(Sandbox.Hotload.IInstanceProcessor,System.Object,System.Object)"/> to handle copying values from the old instance to the new one.
+            </para>
+            <para>
+            If <paramref name="newInstance"/> should be cached as the canonical replacement for <paramref name="oldInstance"/>,
+            call <see cref="M:Sandbox.Hotload.InstanceUpgrader.AddCachedInstance(System.Object,System.Object)"/> here.
+            </para>
+            <para>
+            If finalization should be suppressed, call <see cref="M:Sandbox.Hotload.InstanceUpgrader.SuppressFinalize(System.Object,System.Object)"/>.
+            </para>
+            </remarks>
+            <param name="oldInstance">Original instance that is being replaced / upgraded from.</param>
+            <param name="newInstance">
+            New instance that replaces <paramref name="oldInstance"/>, or <paramref name="oldInstance"/> itself if no replacement is necessary.
+            </param>
+            <param name="createdElsewhere">
+            True if <paramref name="newInstance"/> was created outside of the hotloading system, for example when the
+            containing field has <see cref="P:System.Reflection.FieldInfo.IsInitOnly"/> set to true. Otherwise, when false, <see cref="M:Sandbox.Hotload.InstanceUpgrader.OnTryCreateNewInstance(System.Object,System.Object@)"/>
+            will have been called just before this method.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Sandbox.Hotload.InstanceUpgrader.OnProcessInstance(System.Object,System.Object)">
+            <summary>
+            Perform extra field processing on a new instance that has previously been created by this upgrader in
+            <see cref="M:Sandbox.Hotload.InstanceUpgrader.OnTryCreateNewInstance(System.Object,System.Object@)"/>. This is a good place to discover any other instances that should be upgraded
+            that are stored in <paramref name="oldInstance"/>, which can be upgraded by calling <see cref="M:Sandbox.Hotload.InstanceUpgrader.GetNewInstance(System.Object)"/>.
+            </summary>
+            <param name="oldInstance">The original instance that was upgraded.</param>
+            <param name="newInstance">Upgraded version of <paramref name="oldInstance"/>, or even the same object if no upgrade
+            was required.</param>
+            <returns>Roughly how many instances were processed by this method. Only used for performance stats.</returns>
+        </member>
+        <member name="M:Sandbox.Hotload.SimplifySwaps">
+            <summary>
+            Merge chains of swaps. For example, if A is swapped with B, and B is swapped with C, simplify to A swapping with C.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.UpdateReferences">
+            <summary>
+            Cycle though all types in all watched assemblies.
+            Find statics, iterate over all their fields recursively.
+            Replace any instances of classes that are defined in the assemblies added using ReplacingAssembly
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.ValidateNewType(System.Type)">
+            <summary>
+            Make sure a candidate type substitution isn't at all defined in a swapped-out assembly.
+            This can go wrong if assembly B references assembly A, but only assembly A was swapped.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.GetNewType(System.Type)">
+            <summary>
+            In a swapped assembly find a replacement type for this type.
+            Return null if no replacement is found.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Hotload.WatchedAssemblies">
+            <summary>
+            Currently watched assemblies, to enumerate the static fields of. This will contain assemblies added with <see cref="M:Sandbox.Hotload.WatchAssembly(System.Reflection.Assembly,System.Func{System.Type,System.Boolean})"/>,
+            along with (after a hotload) the most recent replacing assemblies passed to <see cref="M:Sandbox.Hotload.ReplacingAssembly(System.Reflection.Assembly,System.Reflection.Assembly)"/>.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Hotload.WatchedInstances">
+            <summary>
+            Currently watched object instances. Use <see cref="M:Sandbox.Hotload.WatchInstance``1(``0)"/> to add to this set.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Hotload.WatchAssembly(System.Reflection.Assembly,System.Func{System.Type,System.Boolean})">
+            <summary>
+            Look for instances to replace in the static fields of types defined in the given assembly.
+            </summary>
+            <param name="a">Assembly to watch the static fields of.</param>
+            <param name="filter">Only test static fields in types that pass this filter.</param>
+        </member>
+        <member name="M:Sandbox.Hotload.WatchAssembly``1">
+            <summary>
+            Look for instances to replace in the static fields of types defined in 
+            the defining assembly of <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">Type defined in the assembly to watch the static fields of.</typeparam>
+        </member>
+        <member name="M:Sandbox.Hotload.WatchAssembly(System.String,System.Func{System.Type,System.Boolean})">
+            <summary>
+            Look for instances to replace in the static fields of types defined in the given assembly.
+            </summary>
+            <param name="assemblyName">Name of the assembly to watch the static fields of.</param>
+            <param name="filter">Only test static fields in types that pass this filter.</param>
+        </member>
+        <member name="M:Sandbox.Hotload.UnwatchAssembly(System.Reflection.Assembly)">
+            <summary>
+            Stop watching static fields of types defined in the given assembly.
+            </summary>
+            <param name="a">Assembly to stop watching the static fields of.</param>
+        </member>
+        <member name="M:Sandbox.Hotload.WatchInstance``1(``0)">
+            <summary>
+            Look for instances to replace in the fields of the given object.
+            </summary>
+            <param name="obj">Object to watch the fields of.</param>
+        </member>
+        <member name="M:Sandbox.Hotload.UnwatchInstance``1(``0)">
+            <summary>
+            Stop looking for instances to replace in the fields of the given object.
+            </summary>
+            <param name="obj">Object to stop watching the fields of.</param>
+        </member>
+        <member name="T:Sandbox.GeneratedNameKind">
+            <summary>
+            See Microsoft.CodeAnalysis.CSharp.Symbols.GeneratedNameKind
+            </summary>
+        </member>
+        <member name="T:Sandbox.GeneratedName">
+            <summary>
+            See Microsoft.CodeAnalysis.CSharp.Symbols.GeneratedNames.MakeMethodScopedSynthesizedName
+            </summary>
+        </member>
+        <member name="M:Sandbox.GeneratedName.#ctor(System.String,Sandbox.GeneratedNameKind,System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            See Microsoft.CodeAnalysis.CSharp.Symbols.GeneratedNames.MakeMethodScopedSynthesizedName
+            </summary>
+        </member>
+        <member name="T:Sandbox.HotloadEntryType">
+            <summary>
+            Used to categorize messages emitted when performing a hotload.
+            </summary>
+        </member>
+        <member name="F:Sandbox.HotloadEntryType.Trace">
+            <summary>
+            Used for messages related to debugging or profiling.
+            </summary>
+        </member>
+        <member name="F:Sandbox.HotloadEntryType.Information">
+            <summary>
+            Used for general messages.
+            </summary>
+        </member>
+        <member name="F:Sandbox.HotloadEntryType.Warning">
+            <summary>
+            Hotload couldn't upgrade an instance, so you should reload the game to avoid runtime bugs.
+            </summary>
+        </member>
+        <member name="F:Sandbox.HotloadEntryType.Error">
+            <summary>
+            Something went wrong during the hotload that Facepunch should fix.
+            </summary>
+        </member>
+        <member name="T:Sandbox.HotloadResultEntry">
+            <summary>
+            Contains information for an individual hotload result message or error.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResultEntry.Type">
+            <summary>
+            Hotload result category.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResultEntry.Message">
+            <summary>
+            Contains the main information of the result.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResultEntry.Exception">
+            <summary>
+            If the result type is <see cref="F:Sandbox.HotloadEntryType.Error"/>, contains the
+            exception thrown.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResultEntry.Member">
+            <summary>
+            When relevant, contains the member that this result relates to.
+            </summary>
+        </member>
+        <member name="M:Sandbox.HotloadResultEntry.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>
+            A string that represents the current object.
+            </returns>
+        </member>
+        <member name="P:Sandbox.TimingEntry.Instances">
+            <summary>
+            Total number of instances processed.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TimingEntry.Milliseconds">
+            <summary>
+            Total time taken processing instances.
+            </summary>
+        </member>
+        <member name="T:Sandbox.InstanceTimingEntry">
+            <summary>
+            Holds information about the number of instances and total time taken when
+            processing instances in a certain category.
+            </summary>
+        </member>
+        <member name="P:Sandbox.InstanceTimingEntry.Roots">
+            <summary>
+            The full names and instance count for each static field that instances were found under.
+            Only populated if <see cref="P:Sandbox.Hotload.TraceRoots"/> is set to true.
+            </summary>
+        </member>
+        <member name="T:Sandbox.HotloadResult">
+            <summary>
+            Contains information about an assembly hotload event, including any warnings or errors emitted,
+            the time taken to process instances of different types, and the total number of instances processed.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.TypeTimings">
+            <summary>
+            Contains timing information for each type processed during the hotload.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.ProcessorTimings">
+            <summary>
+            Contains timing information for each IInstanceProcessor during the hotload.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.HasErrors">
+            <summary>
+            If true, at least one error was emitted during the hotload. Information about the error(s) can
+            be found in <see cref="P:Sandbox.HotloadResult.Errors"/>.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.HasWarnings">
+            <summary>
+            If true, at least one warning was emitted during the hotload. Information about the error(s) can
+            be found in <see cref="P:Sandbox.HotloadResult.Errors"/>.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.NoAction">
+            <summary>
+            If true, the hotload was skipped because no replacement assemblies were specified since the last
+            hotload.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.ProcessingTime">
+            <summary>
+            Total time elapsed during the hotload (in milliseconds)
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.Success">
+            <summary>
+            If true, no errors were emitted during the hotload.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.InstancesProcessed">
+            <summary>
+            Total number of instances processed during the hotload.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.Entries">
+            <summary>
+            Retrieves all warnings, errors and other messages emitted during the hotload.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.AutoSkippedTypes">
+            <summary>
+            Types that were automatically determined to be safely skippable.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.Errors">
+            <summary>
+            Retrieves all error messages emitted during the hotload.
+            </summary>
+        </member>
+        <member name="P:Sandbox.HotloadResult.Warnings">
+            <summary>
+            Retrieves all warning messages emitted during the hotload.
+            </summary>
+        </member>
+        <member name="T:Sandbox.ILHotload">
+            <summary>
+            A fast path hotload that patches the existing assemblies IL when applicable
+            </summary>
+        </member>
+        <member name="F:Sandbox.ILHotload.ActiveDetours">
+            <summary>
+            All active detours within an Assembly
+            </summary>
+        </member>
+        <member name="F:Sandbox.ILHotload.DetourFactory">
+            <summary>
+            Make sure we have an initialized detour factory, as it takes a small while to load
+            </summary>
+        </member>
+        <member name="P:Sandbox.ILHotload.IsSupported">
+            <summary>
+            True if <see cref="T:Sandbox.ILHotload"/> is supported on this platform.
+            </summary>
+        </member>
+        <member name="M:Sandbox.ILHotload.FixReferences(MonoMod.Utils.DynamicMethodDefinition,System.Reflection.Module,System.Reflection.Module)">
+            <summary>
+            Replace any references to types or members in <paramref name="replaceModule"/> with references in <paramref name="sourceModule"/>.
+            Returns an array of referenced compiler-generated methods that should also be detoured.
+            </summary>
+        </member>
+        <member name="T:Sandbox.SortingHelper">
+            <summary>
+            Generate an ordering based on a set of first-most and last-most items, and
+            individual constraints between pairs of items. All first-most items will be
+            ordered before all last-most items, and any other items will be put in the
+            middle unless forced to be elsewhere by a constraint.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.ArrayUpgrader.ProcessArrayElements(System.Array,System.Array,System.Type,System.Type)">
+            <returns>True if a deep copy was required.</returns>
+        </member>
+        <member name="M:Sandbox.Upgraders.ArrayUpgrader.HasStructChanged(System.Type,System.Type)">
+            <summary>
+            Determine if the size and field layout of a struct has changed. This should
+            only return true if it is safe to bitwise copy from old instances of the struct
+            to new instances. This will return true if the struct contains reference-type
+            members.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.ArrayUpgrader.CanSkipType(System.Type)">
+            <summary>
+            Return true if type is to be thought of as a primitive
+            ie - a type that never changes, and can just be copied
+            such as a bool, string, float, pointer.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Upgraders.InitializedByAttribute">
+            <summary>
+            This field is initialized by a named method, for use when hotloading.
+            If no method name is given, the field is deliberately left uninitialized.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Upgraders.DefaultUpgrader">
+            <summary>
+            This upgrader will use reflection to go through each field of a new instance, and
+            populate it with an equivalent value found from the old instance. For newly-added
+            fields, it attempts to determine a default value from the constructor of the type.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.DefaultUpgrader.GetFieldsToProcess(System.Type,System.Type,System.Boolean)">
+            <summary>
+            Get all fields on this type, and types it inherits from, that we should process.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.DefaultUpgrader.MatchTypeHierarchies(System.Type,System.Type)">
+            <summary>
+            For each type in <paramref name="newType"/>'s hierarchy, try to find a matching type in <paramref name="oldType"/>'s hierarchy.
+            If no match is found, yields <c>(null, dstType)</c>. Ordered by most derived type first.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.DefaultUpgrader.GetFieldsToProcessUncached(System.Type,System.Type,System.Boolean)">
+            <summary>
+            For each field in <paramref name="newType"/>, try to find the matching field in <paramref name="oldType"/>. If no match is found,
+            yields <c>(null, dstField)</c>, so we can initialize the new field to a default value.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Upgraders.DelegateUpgrader.LambdaCaptureMode.None">
+            <summary>
+            The lambda captures nothing local.
+            Method is declared in a nested "&lt;&gt;c" class in the context's declaring type.
+            Method is named like "&lt;{ContextName:ident}&gt;b__{ContextIndex:int}_{LambdaIndex:int}".
+            </summary>
+        </member>
+        <member name="F:Sandbox.Upgraders.DelegateUpgrader.LambdaCaptureMode.TargetInstance">
+            <summary>
+            The lambda captures only an instance of the context's declaring type.
+            Method is declared in the context's declaring type itself.
+            Method is named like "&lt;{ContextName:ident}&gt;b__{ContextIndex:int}_{LambdaIndex:int}".
+            </summary>
+        </member>
+        <member name="F:Sandbox.Upgraders.DelegateUpgrader.LambdaCaptureMode.DisplayClass">
+            <summary>
+            The lambda captures other local values from the context.
+            Method is declared in a nested "&lt;&gt;__DisplayClass{ContextIndex:int}_{DisplayClassIndex:int}" class.
+            Method is named like "&lt;{ContextName:ident}&gt;b__{LambdaIndex:int}".
+            </summary>
+        </member>
+        <member name="F:Sandbox.Upgraders.SkipUpgrader.AdditionalSkipableTypes">
+            <summary>
+            Types that we can safely skip, that we can't add a <see cref="T:Sandbox.SkipHotloadAttribute"/> to.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Upgraders.AutoSkipUpgrader">
+            <summary>
+            Instance upgrader that will try to automatically find types are definitely skippable. This upgrader isn't
+            added automatically, you can enable it by calling <see cref="M:Sandbox.Hotload.AddUpgrader(Sandbox.Hotload.IInstanceUpgrader)"/>.
+            </summary>
+            <remarks>
+            <para>
+            We attempt this almost last (just before <see cref="T:Sandbox.Upgraders.DefaultUpgrader"/>) so that any upgraders
+            that handle specific types will be chosen first, and therefore stop those types from being skipped.
+            Adds any skippable types it finds to a cache, and forces <see cref="F:Sandbox.Upgraders.AutoSkipUpgrader.SkipUpgrader"/> to process them.
+            </para>
+            <para>
+            This performs an under-approximation, but you can use <see cref="T:Sandbox.SkipHotloadAttribute"/> to mark any types it
+            misses that you know are safe to skip.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Sandbox.Upgraders.AutoSkipUpgrader.SkippedTypes">
+            <summary>
+            The set of types that have been determined to be safe to skip.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Upgraders.SpecialCases.ConcurrentQueueUpgrader">
+            <summary>
+            Custom handling for <see cref="T:System.Collections.Concurrent.ConcurrentQueue`1"/> to reduce hotload processing time.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Upgraders.SpecialCases.BaseDictionaryUpgrader">
+            <summary>
+            Base upgrader for <see cref="T:System.Collections.IDictionary"/> implementations.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.SpecialCases.BaseDictionaryUpgrader.#ctor(System.Type)">
+            <summary>
+            Base upgrader for <see cref="T:System.Collections.IDictionary"/> implementations.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Upgraders.SpecialCases.KeyedCollectionUpgrader`1">
+            <summary>
+            Base class for upgraders that process collections that store items with unique keys,
+            like <see cref="T:System.Collections.Generic.Dictionary`2"/> and <see cref="T:System.Collections.Generic.HashSet`1"/>.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.SpecialCases.KeyedCollectionUpgrader`1.#ctor(System.Type)">
+            <summary>
+            Base class for upgraders that process collections that store items with unique keys,
+            like <see cref="T:System.Collections.Generic.Dictionary`2"/> and <see cref="T:System.Collections.Generic.HashSet`1"/>.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Upgraders.SpecialCases.KeyedCollectionUpgrader`1.GenericTypeDefinition">
+            <summary>
+            Which collection type does this upgrader process?
+            </summary>
+        </member>
+        <member name="T:Sandbox.Upgraders.SpecialCases.KeyedCollectionUpgrader`1.ICollectionWrapper">
+            <summary>
+            Collection accessor to avoid reflection if there isn't already a non-generic interface.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.SpecialCases.KeyedCollectionUpgrader`1.GetComparerProperty(System.Type)">
+            <summary>
+            Look for a property named <c>Comparer</c> in the given <paramref name="type"/>.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.SpecialCases.KeyedCollectionUpgrader`1.GetComparerConstructor(System.Type)">
+            <summary>
+            Look for a constructor in <paramref name="type"/> with exactly one parameter,
+            with that parameter matching the type of the property found with
+            <see cref="M:Sandbox.Upgraders.SpecialCases.KeyedCollectionUpgrader`1.GetComparerProperty(System.Type)"/>.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Upgraders.SpecialCases.ListUpgrader">
+            <summary>
+            Upgrader for <see cref="T:System.Collections.Generic.List`1"/> so that we only process its live elements.
+            Without this, hotload would process the whole inner array, even if the list was cleared.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Upgraders.SpecialCases.JsonSerializerOptionsUpgrader">
+            <summary>
+            System.Text.Json keeps a bunch of generated methods cached that we can't upgrade properly.
+            Let's just clear the cache, and warn if the cache got populated again during the hotload.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Upgraders.SpecialCases.ConditionalWeakTableUpgrader.Wrapper`2.Count">
+            <summary>
+            Can't get the count of a <see cref="T:System.Runtime.CompilerServices.ConditionalWeakTable`2"/>, so returns <see langword="null"/>.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Upgraders.GroupOrder.Default">
+            <summary>
+            Only use <see cref="T:Sandbox.Upgraders.AttemptBeforeAttribute"/> and <see cref="T:Sandbox.Upgraders.AttemptAfterAttribute"/> to
+            determine ordering within a <see cref="T:Sandbox.Upgraders.UpgraderGroup"/>.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Upgraders.GroupOrder.First">
+            <summary>
+            Try to put this upgrader as close to the start of the given group as possible.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Upgraders.GroupOrder.Last">
+            <summary>
+            Try to put this upgrader as close to the end of the given group as possible.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Upgraders.AttemptBeforeAttribute">
+            <summary>
+            Use this attribute to specify that a <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/> should attempt to process
+            each object before all other specified <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/> types.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Upgraders.AttemptBeforeAttribute.InstanceUpgraderTypes">
+            <summary>
+            <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/> types that should attempt to process each object after the type this attribute is on.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.AttemptBeforeAttribute.#ctor(System.Type[])">
+            <summary>
+            Create an instance of <see cref="T:Sandbox.Upgraders.AttemptBeforeAttribute"/> with a list of <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/> types.
+            </summary>
+            <param name="instanceUpgraderTypes">One or more <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/> types.</param>
+        </member>
+        <member name="T:Sandbox.Upgraders.AttemptAfterAttribute">
+            <summary>
+            Use this attribute to specify that a <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/> should attempt to process
+            each object after all other specified <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/> types.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Upgraders.AttemptAfterAttribute.InstanceUpgraderTypes">
+            <summary>
+            <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/> types that should attempt to process each object before the type this attribute is on.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.AttemptAfterAttribute.#ctor(System.Type[])">
+            <summary>
+            Create an instance of <see cref="T:Sandbox.Upgraders.AttemptAfterAttribute"/> with a list of <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/> types.
+            </summary>
+            <param name="instanceUpgraderTypes">One or more <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/> types.</param>
+        </member>
+        <member name="T:Sandbox.Upgraders.UpgraderGroup">
+            <summary>
+            Used to organize <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/>s into groups that update
+            in a particular order. Use <see cref="T:Sandbox.Upgraders.UpgraderGroupAttribute"/> to specify which group an
+            upgrader should be added to.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Upgraders.UpgraderGroup.ChildUpgraders">
+            <summary>
+            A list of <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/>s added to this group, where this group is their immediate parent.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Upgraders.UpgraderGroup.ChildUpgraderOrder">
+            <summary>
+            Indices into <see cref="F:Sandbox.Upgraders.UpgraderGroup.ChildUpgraders"/>, sorted by <see cref="M:Sandbox.Upgraders.UpgraderGroup.SortUpgraders"/>.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Upgraders.UpgraderGroup.UpgraderCache">
+            <summary>
+            For each <see cref="T:System.Type"/>, caches which <see cref="T:Sandbox.Hotload.IInstanceUpgrader"/>s should attempt to process
+            instances of that type, as given by <see cref="M:Sandbox.Hotload.IInstanceUpgrader.ShouldProcessType(System.Type)"/>.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Upgraders.UpgraderGroup.UpgraderOrderDirty">
+            <summary>
+            Should <see cref="F:Sandbox.Upgraders.UpgraderGroup.ChildUpgraders"/> be sorted?
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.UpgraderGroup.AddUpgrader(Sandbox.Hotload.IInstanceUpgrader,System.Type[],System.Int32)">
+            <summary>
+            Works out which child group to add the given upgrader to, or whether to add it to this group.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Upgraders.UpgraderGroup.GetUpgradersForType(System.Type)">
+            <summary>
+            Returns a flat array of upgraders that can process the given type, in
+            order of precedence. This array won't contain <see cref="T:Sandbox.Upgraders.UpgraderGroup"/>s,
+            but it will contain upgraders found within those groups.
+            </summary>
+            <param name="type">Type to find upgraders for.</param>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.AnonymousTypeParamNameRegex_0">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the AnonymousTypeParamNameRegex method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.AnonymousTypeParamNameRegex_0.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.AnonymousTypeParamNameRegex_0.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.AnonymousTypeParamNameRegex_0.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.AnonymousTypeParamNameRegex_0.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.AnonymousTypeParamNameRegex_0.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.AnonymousTypeParamNameRegex_0.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.AnonymousTypeParamNameRegex_0.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.AnonymousTypeParamNameRegex_0.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.Utilities">
+            <summary>Helper methods used by generated <see cref="T:System.Text.RegularExpressions.Regex"/>-derived implementations.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout">
+            <summary>Default timeout value set in <see cref="T:System.AppContext"/>, or <see cref="F:System.Text.RegularExpressions.Regex.InfiniteMatchTimeout"/> if none was set.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_hasTimeout">
+            <summary>Whether <see cref="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout"/> is non-infinite.</summary>
+        </member>
+    </members>
+</doc>

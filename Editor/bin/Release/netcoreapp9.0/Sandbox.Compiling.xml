@@ -1,0 +1,496 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sandbox.Compiling</name>
+    </assembly>
+    <members>
+        <member name="P:Sandbox.CodeArchive.CompilerName">
+            <summary>
+            The name of the compiler
+            </summary>
+        </member>
+        <member name="P:Sandbox.CodeArchive.Configuration">
+            <summary>
+            The compiler's configuration settings
+            </summary>
+        </member>
+        <member name="P:Sandbox.CodeArchive.SyntaxTrees">
+            <summary>
+            The syntax trees that should be compiled
+            </summary>
+        </member>
+        <member name="T:Sandbox.CodeArchive.AdditionalFile">
+            <summary>
+            Represents a file to send to the compiler along with all the code. This is usually
+            something that the generator turns into code, such as a Razor file.
+            </summary>
+        </member>
+        <member name="M:Sandbox.CodeArchive.AdditionalFile.#ctor(System.String,System.String)">
+            <summary>
+            Represents a file to send to the compiler along with all the code. This is usually
+            something that the generator turns into code, such as a Razor file.
+            </summary>
+        </member>
+        <member name="P:Sandbox.CodeArchive.AdditionalFiles">
+            <summary>
+            Additional files that the compiler/generator needs. This is going to be .razor files.
+            </summary>
+        </member>
+        <member name="P:Sandbox.CodeArchive.FileMap">
+            <summary>
+            Converts the syntax tree paths from physical paths to project local paths
+            </summary>
+        </member>
+        <member name="P:Sandbox.CodeArchive.References">
+            <summary>
+            References that this compiler/generator needs to compile the code
+            </summary>
+        </member>
+        <member name="P:Sandbox.CodeArchive.Version">
+            <summary>
+            The version of the code archive
+            1005 - Inital version
+            1006 - Razor updates. Add razor namespaces on older versions.
+            </summary>
+        </member>
+        <member name="M:Sandbox.CodeArchive.Serialize">
+            <summary>
+            Serialize to a byte array
+            </summary>
+        </member>
+        <member name="M:Sandbox.CodeArchive.Deserialize(System.Byte[])">
+            <summary>
+            Deserialize from a byte array
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.SuppressBuildNotifications">
+            <summary>
+            Build notifications start of suppressed until after startup proper. That way
+            we don't get 4 build notification windows popping up on startup.
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.Compilers">
+            <summary>
+            The compilers within the group
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.Name">
+            <summary>
+            The name of this compile group, for debugging/display purposes
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.NeedsBuild">
+            <summary>
+            Returns true if we have compiles pending
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.IsBuilding">
+            <summary>
+            Returns true if we are currently in the process of building
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.PrintErrorsInConsole">
+            <summary>
+            True if we want to print errors in the console when compiling
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.AllowFastHotload">
+            <summary>
+            True if we want to use fast hotloading with this compile group
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.BuildResult">
+            <summary>
+            Returns true if build was successful
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.OnCompileStarted">
+            <summary>
+            Called when a compiling starts
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.OnCompileFinished">
+            <summary>
+            Called when a compiling ends
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.OnCompileSuccess">
+            <summary>
+            Called when a compile completes successfully. Can access the result from BuildResult. 
+            </summary>
+        </member>
+        <member name="F:Sandbox.CompileGroup._compilers">
+            <summary>
+            All created compilers.
+            </summary>
+        </member>
+        <member name="F:Sandbox.CompileGroup._recompileList">
+            <summary>
+            Compilers waiting for recompile
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompileGroup.ReferenceProvider">
+            <summary>
+            Allows providing an external way to find references
+            </summary>
+        </member>
+        <member name="M:Sandbox.CompileGroup.Dispose">
+            <summary>
+            Shut everything down
+            </summary>
+        </member>
+        <member name="M:Sandbox.CompileGroup.CreateCompiler(System.String,System.String,Sandbox.Compiler.Configuration)">
+            <summary>
+            Create a new compiler in this group.
+            </summary>
+        </member>
+        <member name="M:Sandbox.CompileGroup.MarkForRecompile(Sandbox.Compiler)">
+            <summary>
+            Mark this assembly as changed.
+            </summary>
+        </member>
+        <member name="M:Sandbox.CompileGroup.CompilerNeedsBuild(Sandbox.Compiler)">
+            <summary>
+            Returns true if this group will compile <paramref name="compiler"/> next build.
+            </summary>
+        </member>
+        <member name="M:Sandbox.CompileGroup.MarkDependantsForRecompile(Sandbox.Compiler,System.Collections.Generic.HashSet{Sandbox.Compiler})">
+            <summary>
+            Recompile anything that depends on us too
+            </summary>
+        </member>
+        <member name="M:Sandbox.CompileGroup.BuildAsync">
+            <summary>
+            Build the compilers
+            </summary>
+        </member>
+        <member name="M:Sandbox.CompileGroup.FindReferenceAsync(System.String,Sandbox.Compiler)">
+            <summary>
+            Find a reference for this dll. Throws if a reference is not found / invalid, and returns <see langword="null"/> if
+            a reference should be silently ignored (like self-referencing).
+            </summary>
+        </member>
+        <member name="M:Sandbox.CompileGroup.Reset">
+            <summary>
+            Reset the compile group. Clear errors and outputs.
+            </summary>
+        </member>
+        <member name="T:Sandbox.ICompileReferenceProvider">
+            <summary>
+            Allows you to look up references for a compiler.
+            </summary>
+        </member>
+        <member name="M:Sandbox.ICompileReferenceProvider.Lookup(System.String)">
+            <summary>
+            Find a reference for this dll
+            </summary>
+        </member>
+        <member name="T:Sandbox.Compiler">
+            <summary>
+            Given a folder of .cs files, this will produce (and load) an assembly
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.Configuration.Whitelist">
+            <summary>
+            If true, we will be using the whitelist system. If false then this package won't
+            be "sandboxed", so won't be able to be published on the platform.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.Configuration.Unsafe">
+            <summary>
+            If true, we'll compile with /unsafe. This means that the package won't be able to
+            be published on the platform.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.Configuration.AssemblyReferences">
+            <summary>
+            References to non-package assemblies, by assembly name.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.Configuration.ReplacementDirectives">
+            <summary>
+            Maps file patterns to preprocessor directives they should be wrapped in
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.Configuration.StripDisabledTextTrivia">
+            <summary>
+            Strips disabled text trivia from the syntax tree. This is stuff like `#if false` blocks that are not compiled.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.Configuration.IgnoreFolders">
+            <summary>
+            Folders to ignore when walking the tree
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.Configuration.DistinctAssemblyReferences">
+            <summary>
+            Each unique element of <see cref="P:Sandbox.Compiler.Configuration.AssemblyReferences"/>
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.Configuration.GetParseOptions">
+            <summary>
+            Returns the CSharpParseOptions for this configuration, which includes the preprocessor symbols defined in <see cref="P:Sandbox.Compiler.Configuration.DefineConstants"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Sandbox.Compiler._compileTcs">
+            <summary>
+            Task completed at the end of <see cref="M:Sandbox.Compiler.BuildAsync"/>, for other compilers to await if
+            they reference this one.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.UpdateFromArchive(Sandbox.CodeArchive)">
+            <summary>
+            Fill this compiler from a code archive
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.PreBuild">
+            <summary>
+            Called by <see cref="T:Sandbox.CompileGroup"/> before a build starts. Prepares this compiler
+            to be referenced by other compilers before they build with <see cref="M:Sandbox.Compiler.BuildAsync"/>.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.BuildAsync">
+            <summary>
+            Build and load the assembly.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.Group">
+            <summary>
+            Each compiler must belong to a compile group
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.Output">
+            <summary>
+            The output from the previous build
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.IsBuilding">
+            <summary>
+            Is this compiler currently building?
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.NeedsBuild">
+            <summary>
+            Returns true if this compiler is pending a build, or currently building.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.Name">
+            <summary>
+            Name of the project this compiler was created for. This could be something like "base" or "org.ident".
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.UseAbsoluteSourcePaths">
+            <summary>
+            During development we use absolute source paths so that debugging works better. In a packed/release build it's
+            good to use relative paths instead, just to avoid exposing the builder's file system.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.Diagnostics">
+            <summary>
+            A list of warnings and errors created by the last build
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.AssemblyName">
+            <summary>
+            Generated assembly name, without an extension. This will be "package.{Name}".
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.GeneratedCode">
+            <summary>
+            Global namespaces
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.SourceLocations">
+            <summary>
+            Directories to search for code
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.FileSystem">
+            <summary>
+            An aggregate of all the filesystem this compiler has
+            </summary>
+        </member>
+        <member name="F:Sandbox.Compiler.MetadataReference">
+            <summary>
+            After compile is completed successfully this will be non null.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Compiler._recentMetadataReferences">
+            <summary>
+            Keeps track of the most recent <see cref="F:Sandbox.Compiler.MetadataReference"/> values,
+            in case the current one is revoked because it was fast-hotloaded.
+            This dictionary is cleared when a version is built that doesn't support
+            fast hotload at all.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Compiler.config">
+            <summary>
+            The compiler's settings. 
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.#ctor(Sandbox.CompileGroup,System.String,System.String,Sandbox.Compiler.Configuration)">
+            <summary>
+            Should only ever get called from CompileGroup.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.#ctor(Sandbox.CompileGroup,System.String)">
+            <summary>
+            Should only ever get called from CompileGroup.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.AddSourcePath(System.String)">
+            <summary>
+            Add an extra source path. Useful for situations where you want to combine multiple addons into one.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.BuildResult">
+            <summary>
+            Results for the assembly build. This can contain warnings or errors.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler.BuildSuccess">
+            <summary>
+            Accesses Output.Successful
+            </summary>
+        </member>
+        <member name="F:Sandbox.Compiler.compileCounter">
+            <summary>
+            Keep tabs of how many times we've compiled
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.ReadTextForgiving(System.String,System.Int32,System.Int32)">
+            <summary>
+            Read text from a file while dealing with the fact that it might be being saved right 
+            when we're loading it so it's likely to throw IOExceptions.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.GetCompileOutputAsync">
+            <summary>
+            Waits for the current build to finish, then outputs that build's result.
+            This is only valid during <see cref="M:Sandbox.CompileGroup.BuildAsync"/>.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.GetReferencedCompilers">
+            <summary>
+            Return this compiler and all child compilers
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.MarkForRecompile">
+            <summary>
+            Recompile this as soon as is appropriate
+            </summary>
+        </member>
+        <member name="P:Sandbox.Compiler._references">
+            <summary>
+            References needed for compile
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.AddReference(System.String)">
+            <summary>
+            Add a reference to this compiler. This might be a system dll, or an assembly name from a fellow compiler.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.HasReference(System.String,System.Boolean)">
+            <summary>
+            Returns true if <see cref="P:Sandbox.Compiler._references"/> contains the given reference assembly name.
+            If <paramref name="deep"/> is true, referenced compilers are searched too.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Compiler.CompilerExtraPath">
+            <summary>
+            Generated file that will get stuff like global usings and assembly attributes.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.GetSyntaxTree(Sandbox.CodeArchive,Microsoft.CodeAnalysis.CSharp.CSharpParseOptions)">
+            <summary>
+            Collect all of the code that should compiled into this assembly
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.StripDisabledTextTrivia(Microsoft.CodeAnalysis.SyntaxTree)">
+            <summary>
+            Strips out disabled text trivia from the syntax tree. This is stuff like `#if false` blocks that are not compiled.
+            </summary>
+            <param name="tree"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sandbox.Compiler.GetReplacementDirective(System.String)">
+            <summary>
+            Check if a file should be wrapped in conditional compilation directives
+            </summary>
+        </member>
+        <member name="M:Sandbox.Compiler.WatchForChanges">
+            <summary>
+            Watch the filesystem for changes to our c# files, and trigger a recompile if they change.
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompilerOutput.Successful">
+            <summary>
+            True if the build succeeded
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompilerOutput.Compiler">
+            <summary>
+            The compiler that has produced this build
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompilerOutput.Version">
+            <summary>
+            The version of the assembly
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompilerOutput.AssemblyData">
+            <summary>
+            The [assembly].dll contents for this build
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompilerOutput.Archive">
+            <summary>
+            A code archive created during the compile
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompilerOutput.XmlDocumentation">
+            <summary>
+            The [assembly].xml contents for this build
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompilerOutput.Diagnostics">
+            <summary>
+            A list of diagnostics caused by the previous build
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompilerOutput.Exception">
+            <summary>
+            If an exception happened during the build, it'll be available here
+            </summary>
+        </member>
+        <member name="P:Sandbox.CompilerOutput.MetadataReference">
+            <summary>
+            For referencing this assembly from another compiler.
+            </summary>
+        </member>
+        <member name="M:Sandbox.BlacklistCodeWalker.DefaultVisit(Microsoft.CodeAnalysis.SyntaxNode)">
+            <summary>
+            Visits every node type, unless that node type has been explicitly overridden.
+            This gives us complete coverage of every type of possible syntax node.
+            From there we can see if it references any blacklisted symbols.
+            </summary>
+        </member>
+        <member name="T:Sandbox.IncrementalCompileState">
+            <summary>
+            Holds state for incremental compilation. Ask Matt or James to add comments, I don't know.
+            </summary>
+        </member>
+        <member name="T:Sandbox.FrameworkReferences">
+            <summary>
+            Loads the framework assemblies from the bin/ref folder and makes 
+            them available globally to every compiler.
+            </summary>
+        </member>
+        <member name="M:Sandbox.FrameworkReferences.FindByName(System.String)">
+            <summary>
+            Find a framework reference by its assembly name
+            </summary>
+        </member>
+    </members>
+</doc>

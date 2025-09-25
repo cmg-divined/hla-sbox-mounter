@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sandbox.Filesystem</name>
+    </assembly>
+    <members>
+        <member name="T:Sandbox.AggregateFileSystem">
+            <summary>
+            A filesystem that merges a bunch of other filesystems. This is read only.
+            </summary>
+        </member>
+        <member name="T:Sandbox.BaseFileSystem">
+            <summary>
+            A filesystem. Could be on disk, or in memory, or in the cloud. Could be writable or read only.
+            Or it could be an aggregation of all those things, merged together and read only.
+            </summary>
+        </member>
+        <member name="P:Sandbox.BaseFileSystem.IsValid">
+            <inheritdoc cref="P:Sandbox.IValid.IsValid"/>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.FindDirectory(System.String,System.String,System.Boolean)">
+            <summary>
+            Get a list of directories
+            </summary>
+        </member>
+        <member name="P:Sandbox.BaseFileSystem.FileCount">
+            <summary>
+            Unoptimal, for debugging purposes - don't expose
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.FindFile(System.String,System.String,System.Boolean)">
+            <summary>
+            Get a list of files
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.DeleteDirectory(System.String,System.Boolean)">
+            <summary>
+            Delete a folder and optionally all of its contents
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.DeleteFile(System.String)">
+            <summary>
+            Delete a file
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.CreateDirectory(System.String)">
+            <summary>
+            Create a directory - or a tree of directories.
+            Returns silently if the directory already exists.
+            </summary>
+            <param name="folder"></param>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.FileExists(System.String)">
+            <summary>
+            Returns true if the file exists on this filesystem
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.DirectoryExists(System.String)">
+            <summary>
+             Returns true if the directory exists on this filesystem
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.GetFullPath(System.String)">
+            <summary>
+            Returns the full physical path to a file or folder on disk,
+            or null if it isn't on disk.
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.GetRelativePath(System.String)">
+            <summary>
+            Returns the relative path
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.WriteAllText(System.String,System.String)">
+            <summary>
+            Write the contents to the path. The file will be over-written if the file exists
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.WriteAllBytes(System.String,System.Byte[])">
+            <summary>
+            Write the contents to the path. The file will be over-written if the file exists
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.ReadAllText(System.String)">
+            <summary>
+            Read the contents of path and return it as a string.
+            Returns null if file not found.
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.ReadAllBytes(System.String)">
+            <summary>
+            Read the contents of path and return it as a string
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.ReadAllBytesAsync(System.String)">
+            <summary>
+            Read the contents of path and return it as a string
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.ReadAllTextAsync(System.String)">
+            <summary>
+            Read the contents of path and return it as a string
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.CreateSubSystem(System.String)">
+            <summary>
+            Create a sub-filesystem at the specified path
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.OpenWrite(System.String,System.IO.FileMode)">
+            <summary>
+            Open a file for write. If the file exists we'll overwrite it (by default)
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.OpenRead(System.String,System.IO.FileMode)">
+            <summary>
+            Open a file for read. Will throw an exception if it doesn't exist.
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.ReadJson``1(System.String,``0)">
+            <summary>
+            Read Json from a file using System.Text.Json.JsonSerializer. This will throw exceptions
+            if not valid json.
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.ReadJsonOrDefault``1(System.String,``0)">
+            <summary>
+            The same as ReadJson except will return a default value on missing/error.
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.WriteJson``1(System.String,``0)">
+            <summary>
+            Convert object to json and write it to the specified file
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.DirectorySize(System.String,System.Boolean)">
+            <summary>
+            Gets the size in bytes of all the files in a directory
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.GetCrcAsync(System.String)">
+            <summary>
+            Returns CRC64 of the file contents.
+            </summary>
+            <param name="filepath">File path to the file to get CRC of.</param>
+            <returns>The CRC64, or 0 if file is not found.</returns>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.GetCrc(System.String)">
+            <summary>
+            Returns CRC64 of the file contents.
+            </summary>
+            <param name="filepath">File path to the file to get CRC of.</param>
+            <returns>The CRC64, or 0 if file is not found.</returns>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.FileSize(System.String)">
+            <summary>
+            Returns file size of given file.
+            </summary>
+            <param name="filepath">File path to the file to look up size of.</param>
+            <returns>File size, in bytes.</returns>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.CreateAndMount(Sandbox.BaseFileSystem,System.String)">
+            <summary>
+            Mount this path on the filesystem, so it's accessible in Mount
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.CreateAndMount(System.String)">
+            <summary>
+            Mount this path on the filesystem, so it's accessible in Mount
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.FixPath(System.String)">
+            <summary>
+            Zio wants good paths to start with '/' - so we add it here if it isn't already on
+            </summary>
+        </member>
+        <member name="M:Sandbox.BaseFileSystem.NormalizeFilename(System.String)">
+            <summary>
+            Lowercase the filename and replace \ with /
+            </summary>
+        </member>
+        <member name="T:Sandbox.FileWatch">
+            <summary>
+            Watch folders, dispatch events on changed files
+            </summary>
+        </member>
+        <member name="P:Sandbox.FileWatch.SuppressWatchers">
+            <summary>
+            Bit of a hack until we can do better. Don't trigger any watchers until this time.
+            </summary>
+        </member>
+        <member name="E:Sandbox.FileWatch.OnChanges">
+            <summary>
+            Called once per batch of files changed
+            </summary>
+        </member>
+        <member name="E:Sandbox.FileWatch.OnChangedFile">
+            <summary>
+            Called for each file changed
+            </summary>
+        </member>
+        <member name="M:Sandbox.FileWatch.TickUntilFileChanged(System.String)">
+            <summary>
+            This is used for unit tests, to assure that a change is detected
+            </summary>
+        </member>
+        <member name="T:Sandbox.LocalFileSystem">
+            <summary>
+            A directory on a disk
+            </summary>
+        </member>
+        <member name="T:Sandbox.MemoryFileSystem">
+            <summary>
+            A filesystem that only exists in memory
+            </summary>
+        </member>
+        <member name="T:Sandbox.Internal.RedirectFileSystem">
+            <summary>
+            A readonly filesystem that has a list of files, and a list of redirects. When accessing a file, it'll access the redirect file invisibly.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.RedirectFileSystem.AddFile(System.String,System.String)">
+            <summary>
+            Add a redirect path
+            </summary>
+            <param name="localPath">The path you want to pretend to be (local)</param>
+            <param name="targetPath">The path you want to redirect to (relative to our root filesystem)</param>
+        </member>
+    </members>
+</doc>

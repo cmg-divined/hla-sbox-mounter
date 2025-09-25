@@ -1,0 +1,2407 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Facepunch.ActionGraphs</name>
+    </assembly>
+    <members>
+        <member name="T:Facepunch.ActionGraphs.InsertResult">
+            <summary>
+            Elements added by a call to <see cref="!:IActionGraph.DeserializeInsert"/>.
+            </summary>
+            <param name="Variables">Newly added variables.</param>
+            <param name="Nodes">Newly added nodes.</param>
+            <param name="Links">Newly added links.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.InsertResult.#ctor(System.Collections.Generic.IReadOnlyCollection{Facepunch.ActionGraphs.Variable},System.Collections.Generic.IReadOnlyCollection{Facepunch.ActionGraphs.Node},System.Collections.Generic.IReadOnlyCollection{Facepunch.ActionGraphs.Link})">
+            <summary>
+            Elements added by a call to <see cref="!:IActionGraph.DeserializeInsert"/>.
+            </summary>
+            <param name="Variables">Newly added variables.</param>
+            <param name="Nodes">Newly added nodes.</param>
+            <param name="Links">Newly added links.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.InsertResult.Variables">
+            <summary>Newly added variables.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.InsertResult.Nodes">
+            <summary>Newly added nodes.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.InsertResult.Links">
+            <summary>Newly added links.</summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ActionGraph">
+            <summary>
+            Represents an async method as a directed graph. Control will enter through an "event" node, which
+            can route signals through a network of other nodes that perform actions.
+            Use <see cref="M:Facepunch.ActionGraphs.ActionGraph.CreateEmpty(Facepunch.ActionGraphs.NodeLibrary)"/> to create a completely blank graph, or <see cref="M:Facepunch.ActionGraphs.ActionGraph.CreateDelegate``1(Facepunch.ActionGraphs.NodeLibrary)"/>
+            to create a graph that handles an event matching the signature of a particular delegate.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.TargetDefinition">
+            <summary>
+            The definition of the graph input that represents the target of the graph.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.TargetOutput">
+            <summary>
+            The output of the graph's entry node that represents the target of the graph.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.SourceLocation">
+            <summary>
+            Identifies where this instance was deserialized from.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.NodeLibrary">
+            <summary>
+            Library of node definitions available for use by this action graph.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.Nodes">
+            <summary>
+            Set of nodes added to this action graph.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.Links">
+            <summary>
+            Set of links added between nodes in this action graph.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.Variables">
+            <summary>
+            Set of variables added to this action graph.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.UserData">
+            <summary>
+            Arbitrary named values stored in this action graph, which will be included during serialization.
+            Values must be serializable to JSON.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.InputNode">
+            <summary>
+            Entry point of the graph.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.PrimaryOutputNode">
+            <summary>
+            Primary output of the graph.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.OutputNodes">
+            <summary>
+            Nodes that emit return values or output signals from this graph to the caller.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.AddNode(Facepunch.ActionGraphs.NodeDefinition)">
+            <summary>
+            Add a new node to this action graph, with the given <paramref name="definition"/>.
+            </summary>
+            <param name="definition">Definition describing the properties, inputs and outputs of a node.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.AddNode(Facepunch.ActionGraphs.NodeDefinition,Facepunch.ActionGraphs.Node)">
+            <summary>
+            Add a new node to this action graph, with the given <paramref name="definition"/>.
+            </summary>
+            <param name="definition">Definition describing the properties, inputs and outputs of a node.</param>
+            <param name="parent">Optional parent node to create a child for.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.RemoveNode(Facepunch.ActionGraphs.Node)">
+            <summary>
+            Remove a node from this action graph. Any links into or out of the node will also be removed.
+            </summary>
+            <param name="node">Node to remove.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.AddVariable(System.String,System.Type,System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.RemoveVariable(Facepunch.ActionGraphs.Variable)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.SetLink(Facepunch.ActionGraphs.Node.Input,Facepunch.ActionGraphs.ILinkSource)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.SetLink(Facepunch.ActionGraphs.Node.Input,Facepunch.ActionGraphs.ILinkSource,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.InsertLink(Facepunch.ActionGraphs.Node.Input,Facepunch.ActionGraphs.ILinkSource,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.SetLinks(Facepunch.ActionGraphs.Node.Input,System.Collections.Generic.IEnumerable{Facepunch.ActionGraphs.ILinkSource})">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.RemoveLink(Facepunch.ActionGraphs.Link)">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.StackTraceIdentifier">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.CreateEmpty(Facepunch.ActionGraphs.NodeLibrary)">
+            <summary>
+            Creates a completely blank action graph. This won't be invokable until an event node is added.
+            </summary>
+            <param name="nodeLibrary">Source of node definitions for the new action graph.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.CreateDelegate(Facepunch.ActionGraphs.NodeLibrary,System.Type)">
+            <summary>
+            Creates an action graph with an event node matching the signature of <paramref name="delegateType"/>.
+            </summary>
+            <param name="nodeLibrary">Source of node definitions for the new action graph.</param>
+            <param name="delegateType">Delegate type to match the signature of.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.CreateDelegate``1(Facepunch.ActionGraphs.NodeLibrary)">
+            <summary>
+            Creates an action graph with an event node matching the signature of delegate type <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">Delegate type to base this new action graph on.</typeparam>
+            <param name="nodeLibrary">Source of node definitions for the new action graph.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.Evaluate(System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object})">
+            <summary>
+            For graphs composed only of expression nodes, evaluates all outputs based on the given input values.
+            </summary>
+            <param name="inputs">Values to use for each named input.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.InvokeAsync(System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object},System.Collections.Generic.IReadOnlyDictionary{System.String,Facepunch.ActionGraphs.Compilation.OutputDelegate})">
+            <summary>
+            Fires a signal from the <see cref="P:Facepunch.ActionGraphs.ActionGraph.InputNode"/> of this graph with the given named values as input.
+            The returned task will complete when all resulting actions have finished executing.
+            </summary>
+            <param name="inputs">Values to use for each named input.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.Compile``1">
+            <summary>
+            Returns a delegate factory implementing the current configuration of this action graph.
+            This value is cached if the graph hasn't changed since the last time this was called.
+            </summary>
+        </member>
+        <member name="E:Facepunch.ActionGraphs.ActionGraph.LinkTriggered">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.IsDeserializing">
+            <summary>
+            True during <see cref="M:Facepunch.ActionGraphs.ActionGraph.Deserialize``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Func{``0,``2},System.Func{``1,``2},System.Action{``0},System.Func{``1,``0},System.Func{``0,``1,``0})"/>.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.Serialize(System.Collections.Generic.IEnumerable{Facepunch.ActionGraphs.Node},System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.SerializeToNode(System.Collections.Generic.IEnumerable{Facepunch.ActionGraphs.Node},System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.DeserializeInsert(System.String,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.DeserializeInsert(System.Text.Json.Nodes.JsonNode,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.Deserialize(System.String,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Restore a previously serialized graph from JSON in this instance.
+            </summary>
+            <param name="json">Serialized action graph.</param>
+            <param name="delegateType">Optional delegate type, must match the one used when serializing.</param>
+            <param name="options">Optional serializer options.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.CanCreateSubGraph(System.Collections.Generic.IEnumerable{Facepunch.ActionGraphs.Node})">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.CreateSubGraphAsync(System.Collections.Generic.IEnumerable{Facepunch.ActionGraphs.Node},System.Text.Json.JsonSerializerOptions,Facepunch.ActionGraphs.CreateSubGraphNodeDelegate)">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.ChangeId">
+            <summary>
+            Increments each time this graph re-validates after a change.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraph.Messages">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.Validate(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.ClearChanges">
+            <summary>
+            Don't increment <see cref="P:Facepunch.ActionGraphs.ActionGraph.ChangeId"/> during next validation.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraph.AddSortedNodes(System.Collections.Generic.List{Facepunch.ActionGraphs.Node})">
+            <summary>
+            Adds all nodes to <paramref name="outNodes"/>, sorted topologically.
+            Will add error messages if cycles are detected.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.LinkTriggeredHandler">
+            <summary>
+            Handler for <see cref="E:Facepunch.ActionGraphs.ActionGraph.LinkTriggered"/> events.
+            </summary>
+            <param name="link">The link that was triggered.</param>
+            <param name="value">The value that was propagated, or null for signals.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DelegateExtensions.GetActionGraphInstance(System.Delegate)">
+            <summary>
+            If the given delegate is implemented as exactly one <see cref="T:Facepunch.ActionGraphs.ActionGraph"/>,
+            get that graph and any input value overrides.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DelegateExtensions.GetActionGraphInstance``1(``0)">
+            <summary>
+            If the given delegate is implemented as exactly one <see cref="T:Facepunch.ActionGraphs.ActionGraph"/>,
+            get that graph and any input value overrides.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DelegateExtensions.GetActionGraphInstances(System.Delegate)">
+            <summary>
+            If the given delegate is implemented as one or more <see cref="T:Facepunch.ActionGraphs.ActionGraph"/>s,
+            get those graphs and their input value overrides.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DelegateExtensions.GetActionGraphInstances``1(``0)">
+            <summary>
+            If the given delegate is implemented as one or more <see cref="T:Facepunch.ActionGraphs.ActionGraph"/>s,
+            get those graphs and their input value overrides.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.IActionGraphDelegate">
+            <summary>
+            Wrapper for an <see cref="T:Facepunch.ActionGraphs.ActionGraph"/> invokable as a delegate, with optional overridden input values.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IActionGraphDelegate.Graph">
+            <summary>
+            Wrapped action graph.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IActionGraphDelegate.Delegate">
+            <summary>
+            Delegate that is implemented by <see cref="P:Facepunch.ActionGraphs.IActionGraphDelegate.Graph"/>, with default arguments supplied by <see cref="P:Facepunch.ActionGraphs.IActionGraphDelegate.Defaults"/>.
+            This delegate will remain up-to-date even if the wrapped graph is modified, or default argument dictionary changes.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IActionGraphDelegate.DelegateType">
+            <summary>
+            The type that <see cref="P:Facepunch.ActionGraphs.IActionGraphDelegate.Delegate"/> will contain when compiled.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IActionGraphDelegate.Defaults">
+            <summary>
+            Dictionary of default arguments for any graph input parameters that aren't supplied by delegate parameters.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ActionGraphDelegate`1">
+            <summary>
+            Wrapper for an <see cref="T:Facepunch.ActionGraphs.ActionGraph"/> invokable as a delegate, with optional overridden input values.
+            </summary>
+            <typeparam name="T">Delegate type for the compiled graph.</typeparam>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.ActionGraphDelegate`1._outerDelegate">
+            <summary>
+            Lazily compiled once, wraps compiling <see cref="F:Facepunch.ActionGraphs.ActionGraphDelegate`1._innerDelegate"/> (if changed) and then calling it.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.ActionGraphDelegate`1._innerDelegate">
+            <summary>
+            Lazily compiled each time <see cref="F:Facepunch.ActionGraphs.ActionGraphDelegate`1._outerDelegate"/> is called if <see cref="P:Facepunch.ActionGraphs.ActionGraphDelegate`1.Graph"/> has been modified.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraphDelegate`1.Delegate">
+            <inheritdoc cref="P:Facepunch.ActionGraphs.IActionGraphDelegate.Delegate"/>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraphDelegate`1.DelegateType">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraphDelegate`1.Graph">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ActionGraphDelegate`1.Defaults">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraphDelegate`1.BuildOuterDelegate">
+            <summary>
+            Builds a delegate that calls the wrapped <see cref="P:Facepunch.ActionGraphs.ActionGraphDelegate`1.Graph"/>, supplying any default arguments from <see cref="P:Facepunch.ActionGraphs.ActionGraphDelegate`1.Defaults"/>.
+            This delegate will remain up-to-date even if the wrapped graph is modified, or default argument dictionary changes.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraphDelegate`1.GetInnerDelegate">
+            <summary>
+            Gets a delegate implementing the current configuration of <see cref="P:Facepunch.ActionGraphs.ActionGraphDelegate`1.Graph"/> with default arguments provided by
+            <see cref="P:Facepunch.ActionGraphs.ActionGraphDelegate`1.Defaults"/>, (re)compiling if needed.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ActionGraphExtensions">
+            <summary>
+            Extension methods for action graphs.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraphExtensions.AddNode(Facepunch.ActionGraphs.INodeContainer,System.String)">
+            <summary>
+            Add a new node to this action graph with the given definition ID.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraphExtensions.AddNode``1(Facepunch.ActionGraphs.INodeContainer,``0)">
+            <summary>
+            Add a new node to this action graph, defined by the given method. The method must be already included in <see cref="T:Facepunch.ActionGraphs.NodeLibrary"/>.
+            </summary>
+            <typeparam name="T">Delegate type of the method.</typeparam>
+            <param name="graph">Action graph to add a node to.</param>
+            <param name="func">Method defining a node.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraphExtensions.AddNode(Facepunch.ActionGraphs.INodeContainer,System.Type,System.String)">
+            <summary>
+            Add a new node to this action graph, defined by the given method. The method must be already included in <see cref="T:Facepunch.ActionGraphs.NodeLibrary"/>.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraphExtensions.AddNode(Facepunch.ActionGraphs.INodeContainer,System.Linq.Expressions.ExpressionType)">
+            <summary>
+            Adds a new node to this action graph, defined by the given expression type.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraphExtensions.AddVariableNode(Facepunch.ActionGraphs.INodeContainer,Facepunch.ActionGraphs.Variable,System.Nullable{Facepunch.ActionGraphs.AssignmentKind})">
+            <summary>
+            Add a new variable accessor node to this action graph.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraphExtensions.AddConstantNode(Facepunch.ActionGraphs.INodeContainer,System.Object)">
+            <summary>
+            Add a new constant accessor node to this action graph.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ActionGraphExtensions.SetLinks(Facepunch.ActionGraphs.ActionGraph,Facepunch.ActionGraphs.Node.Input,Facepunch.ActionGraphs.ILinkSource[])">
+            <inheritdoc cref="!:IActionGraph.SetLinks"/>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ISourceLocation">
+            <summary>
+            Interface for types that identify the source of an <see cref="T:Facepunch.ActionGraphs.ActionGraph"/>.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.SerializationOptions">
+            <summary>
+            Controls how <see cref="T:Facepunch.ActionGraphs.ActionGraph"/>s are (de)serialized.
+            </summary>
+            <param name="ImpliedTarget">
+            Add this input to any graphs deserialized in this scope, usually representing
+            a "this" parameter holding the object this graph is embedded in.
+            When serializing, omit this input from the serialized graph because we know
+            it will be added automatically when deserializing.
+            </param>
+            <param name="Cache">
+            Re-use instances from this cache when deserializing, matching by <see cref="P:Facepunch.ActionGraphs.ActionGraph.Guid"/>.
+            Graphs will be added to the cache when serializing or deserializing in this scope.
+            When serializing, if <see cref="P:Facepunch.ActionGraphs.SerializationOptions.WriteCacheReferences"/> is true, a minimal graph reference stub
+            will be written instead of full graphs.
+            </param>
+            <param name="SourceLocation">
+            For debugging / editors, describe where graphs deserialized in this scope came from.
+            </param>
+            <param name="GuidMap">
+            When deserializing, maps any graph <see cref="T:System.Guid"/>s encountered.
+            </param>
+            <param name="WriteCacheReferences">
+            If true, and a <see cref="P:Facepunch.ActionGraphs.SerializationOptions.Cache"/> is provided, write a reference stub when serializing
+            graphs instead of the full JSON.
+            </param>
+            <param name="ForceUpdateCached">
+            If true, replace cached instance when deserializing. Otherwise, it'll only be
+            replaced if its <see cref="P:Facepunch.ActionGraphs.ActionGraph.ChangeId"/> differs.
+            </param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.SerializationOptions.#ctor(Facepunch.ActionGraphs.InputDefinition,Facepunch.ActionGraphs.IActionGraphCache,Facepunch.ActionGraphs.ISourceLocation,System.Collections.Generic.IReadOnlyDictionary{System.Guid,System.Guid},System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Controls how <see cref="T:Facepunch.ActionGraphs.ActionGraph"/>s are (de)serialized.
+            </summary>
+            <param name="ImpliedTarget">
+            Add this input to any graphs deserialized in this scope, usually representing
+            a "this" parameter holding the object this graph is embedded in.
+            When serializing, omit this input from the serialized graph because we know
+            it will be added automatically when deserializing.
+            </param>
+            <param name="Cache">
+            Re-use instances from this cache when deserializing, matching by <see cref="P:Facepunch.ActionGraphs.ActionGraph.Guid"/>.
+            Graphs will be added to the cache when serializing or deserializing in this scope.
+            When serializing, if <see cref="P:Facepunch.ActionGraphs.SerializationOptions.WriteCacheReferences"/> is true, a minimal graph reference stub
+            will be written instead of full graphs.
+            </param>
+            <param name="SourceLocation">
+            For debugging / editors, describe where graphs deserialized in this scope came from.
+            </param>
+            <param name="GuidMap">
+            When deserializing, maps any graph <see cref="T:System.Guid"/>s encountered.
+            </param>
+            <param name="WriteCacheReferences">
+            If true, and a <see cref="P:Facepunch.ActionGraphs.SerializationOptions.Cache"/> is provided, write a reference stub when serializing
+            graphs instead of the full JSON.
+            </param>
+            <param name="ForceUpdateCached">
+            If true, replace cached instance when deserializing. Otherwise, it'll only be
+            replaced if its <see cref="P:Facepunch.ActionGraphs.ActionGraph.ChangeId"/> differs.
+            </param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.SerializationOptions.ImpliedTarget">
+            <summary>
+            Add this input to any graphs deserialized in this scope, usually representing
+            a "this" parameter holding the object this graph is embedded in.
+            When serializing, omit this input from the serialized graph because we know
+            it will be added automatically when deserializing.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.SerializationOptions.Cache">
+            <summary>
+            Re-use instances from this cache when deserializing, matching by <see cref="P:Facepunch.ActionGraphs.ActionGraph.Guid"/>.
+            Graphs will be added to the cache when serializing or deserializing in this scope.
+            When serializing, if <see cref="P:Facepunch.ActionGraphs.SerializationOptions.WriteCacheReferences"/> is true, a minimal graph reference stub
+            will be written instead of full graphs.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.SerializationOptions.SourceLocation">
+            <summary>
+            For debugging / editors, describe where graphs deserialized in this scope came from.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.SerializationOptions.GuidMap">
+            <summary>
+            When deserializing, maps any graph <see cref="T:System.Guid"/>s encountered.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.SerializationOptions.WriteCacheReferences">
+            <summary>
+            If true, and a <see cref="P:Facepunch.ActionGraphs.SerializationOptions.Cache"/> is provided, write a reference stub when serializing
+            graphs instead of the full JSON.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.SerializationOptions.ForceUpdateCached">
+            <summary>
+            If true, replace cached instance when deserializing. Otherwise, it'll only be
+            replaced if its <see cref="P:Facepunch.ActionGraphs.ActionGraph.ChangeId"/> differs.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.SerializationOptions.Empty">
+            <summary>
+            Default empty <see cref="T:Facepunch.ActionGraphs.SerializationOptions"/>.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.MessageLevel">
+            <summary>
+            Severity level of a validation message.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.MessageLevel.Info">
+            <summary>
+            Purely informative, there's nothing to fix.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.MessageLevel.Warning">
+            <summary>
+            Suggests that something might not be intended, but isn't an error.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.MessageLevel.Error">
+            <summary>
+            Something is incorrect and must be fixed in order to pass validation.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.IMessageContext">
+            <summary>
+            Interface for action graph elements that can be the context of a <see cref="T:Facepunch.ActionGraphs.ValidationMessage"/>.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IMessageContext.ActionGraph">
+            <summary>
+            Action graph this element belongs to.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IMessageContext.Parent">
+            <summary>
+            Parent element in the graph. Parents will list all validation messages of
+            their children.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IMessageContext.StackTraceIdentifier">
+            <summary>
+            Unique identifier for this graph element in a stack trace.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ValidationExtensions">
+            <summary>
+            Extension methods related to validation and validation messages.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ValidationExtensions.GetMessages(Facepunch.ActionGraphs.IMessageContext)">
+            <summary>
+            Gets all validation messages where this, or any child element, is the context.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ValidationExtensions.HasErrors(Facepunch.ActionGraphs.IMessageContext)">
+            <summary>
+            Returns true if any contained validation messages are errors. An action graph can't
+            be invoked if it has any errors.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ValidationMessage">
+            <summary>
+            A message generated during validation with a context, level, and value.
+            </summary>
+            <param name="Context">Action graph element most relevant to this message.</param>
+            <param name="Level">Severity of the message.</param>
+            <param name="Value">Message content.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ValidationMessage.#ctor(Facepunch.ActionGraphs.IMessageContext,Facepunch.ActionGraphs.MessageLevel,System.String,System.Object)">
+            <summary>
+            A message generated during validation with a context, level, and value.
+            </summary>
+            <param name="Context">Action graph element most relevant to this message.</param>
+            <param name="Level">Severity of the message.</param>
+            <param name="Value">Message content.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ValidationMessage.Context">
+            <summary>Action graph element most relevant to this message.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ValidationMessage.Level">
+            <summary>Severity of the message.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ValidationMessage.Value">
+            <summary>Message content.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ValidationMessage.IsError">
+            <summary>
+            If true, this message was a cause for the action graph to fail validation.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ValidationMessage.ToString">
+            <summary>
+            Returns the message formatted as "[Level] Value (Context)".
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ValidationException">
+            <summary>
+            Exception thrown when an invalid action graph is invoked.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ValidationException.#ctor(Facepunch.ActionGraphs.IMessageContext,System.String)">
+            <summary>
+            Exception thrown when an invalid action graph is invoked.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.ValidationException.Context">
+            <summary>
+            Action graph element most relevant to this exception.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ValidationException.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ActionGraphCache">
+            <summary>
+            Used to re-use <see cref="T:Facepunch.ActionGraphs.ActionGraph"/> instances when deserializing.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.INodeAttribute">
+            <summary>
+            Used to define ActionGraph nodes using static methods, properties, or constructors.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.INodeAttribute.Identifier">
+            <summary>
+            A unique name to identify this node type.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.NodeAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.INodeAttribute" />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeAttribute.#ctor(System.String)">
+            <summary>
+            Used to define ActionGraph nodes using static methods, properties, or constructors.
+            </summary>
+            <param name="identifier">A unique name to identify this node type.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeAttribute.Identifier">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeAttribute.DefaultInputSignal">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeAttribute.DefaultOutputSignal">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeAttribute.InheritAsync">
+            <inheritdoc />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.IPureAttribute">
+            <summary>
+            Declares a method to not have any side effects, it only performs a calculation
+            using its inputs and outputs a result.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.IImpureAttribute">
+            <summary>
+            Declares a method to have side effects, even if it's declared as
+            readonly.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.PureAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.IPureAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ImpureAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.IImpureAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.IPropertyAttribute">
+            <summary>
+            For binding in methods marked with a <see cref="T:Facepunch.ActionGraphs.NodeAttribute"/>, this parameter should only
+            be configurable in the inspector as a property and not have a dedicated input.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.PropertyAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.IPropertyAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ITargetAttribute">
+            <summary>
+            For binding in methods marked with a <see cref="T:Facepunch.ActionGraphs.NodeAttribute"/>, this parameter represents
+            the target instance object the method is executed on.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.TargetAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.ITargetAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.IExposeWhenCachedAttribute">
+            <summary>
+            Declares that instances of the marked type can't be cached in a <see cref="T:Facepunch.ActionGraphs.ActionGraphCache"/>.
+            For example, if they might contain an ID that needs to get fixed up post serialization.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ExposeWhenCachedAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.IExposeWhenCachedAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.IAlwaysInvokedAttribute">
+            <summary>
+            Marks an output signal that will always be dispatched before the default output
+            signal. Used on a parameter of a method marked with <see cref="T:Facepunch.ActionGraphs.NodeAttribute"/>.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.AlwaysInvokedAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.IAlwaysInvokedAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.INodeDefinitionAttribute">
+            <summary>
+            Marks a class extending <see cref="T:Facepunch.ActionGraphs.NodeDefinition"/> that should be automatically
+            added to a <see cref="T:Facepunch.ActionGraphs.NodeLibrary"/> when <see cref="M:Facepunch.ActionGraphs.NodeLibrary.AddAssembly(System.Reflection.Assembly)"/> is called.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.NodeDefinitionAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.INodeDefinitionAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Compilation.ValueScopes">
+            <param name="FromSignalOutput">Scopes for each signal output of action nodes.</param>
+            <param name="FromValueInput">Scopes for each input that needs to be evaluated each time it is accessed.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Compilation.ValueScopes.#ctor(System.Collections.Generic.IReadOnlyDictionary{Facepunch.ActionGraphs.Node.Output,Facepunch.ActionGraphs.Compilation.ValueScope},System.Collections.Generic.IReadOnlyDictionary{Facepunch.ActionGraphs.Node.Input,Facepunch.ActionGraphs.Compilation.ValueScope})">
+            <param name="FromSignalOutput">Scopes for each signal output of action nodes.</param>
+            <param name="FromValueInput">Scopes for each input that needs to be evaluated each time it is accessed.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Compilation.ValueScopes.FromSignalOutput">
+            <summary>Scopes for each signal output of action nodes.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Compilation.ValueScopes.FromValueInput">
+            <summary>Scopes for each input that needs to be evaluated each time it is accessed.</summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Compilation.IOutputValue">
+            <summary>
+            Describes a node output in this scope. It can either have a local variable that gets
+            set during the body of its node, or a constant expression that gets defined during the body.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Compilation.ValueScope">
+            <summary>
+            Wraps a set of value inputs of action nodes that should be evaluated at the same time.
+            Each referenced expression node in the scope will be evaluated at most once, so if the
+            result of a node is used multiple times it will have the same value. This is both an
+            optimization, and expected behaviour if things like random numbers are sampled.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Compilation.ValueScope.Parameter">
+            <summary>
+            The input or output parameter this scope was created from.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Compilation.ValueScope.Parent">
+            <summary>
+            The scope immediately containing this one. The graph input node has no scope.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Compilation.ValueScope.ActionValueInputs">
+            <summary>
+            Inputs on action nodes included in this scope. This doesn't include inputs of
+            referenced expression nodes.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Compilation.ValueScope.AllowCaching">
+            <summary>
+            If false, we need to re-evaluate the scope each time an input is accessed.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.AssignmentKind">
+            <summary>
+            Operations accessor nodes can perform.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.AssignmentKind.Set">
+            <summary>
+            Replace the old value with the new value.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.AssignmentKind.Add">
+            <summary>
+            Replace the old value with old + new.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.AssignmentKind.Subtract">
+            <summary>
+            Replace the old value with old - new.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.AssignmentKind.Multiply">
+            <summary>
+            Replace the old value with old * new.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.AssignmentKind.Divide">
+            <summary>
+            Replace the old value with old / new.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.AssignmentKind.Increment">
+            <summary>
+            Replace the old value with old + 1.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.AssignmentKind.Decrement">
+            <summary>
+            Replace the old value with old - 1.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.AccessorNodeDefinition`1">
+            <summary>
+            Base class for nodes that get / set values.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.AccessorNodeDefinition`1.IsTrivial">
+            <summary>
+            If true, don't bother storing the result in a local variable when accessing.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.DispatchNodeDefinition">
+            <summary>
+            Base type for node definitions that run a bunch of output signals simultaneously,
+            like <see cref="M:System.Threading.Tasks.Task.WhenAll(System.Threading.Tasks.Task[])"/> or <see cref="M:System.Threading.Tasks.Task.WhenAny(System.Threading.Tasks.Task[])"/>.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.MethodBinder.Bind(System.Reflection.MethodBase)">
+            <summary>
+            Given a method, returns a node binding specifying
+            which properties, inputs and outputs the method has.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Input`1">
+            <summary>
+            Helper type for input parameters of methods marked with <see cref="T:Facepunch.ActionGraphs.NodeAttribute"/>.
+            The value of this input can be evaluated on demand, for cases where it may change during the
+            invocation of the node.
+            </summary>
+            <typeparam name="T">Actual input type.</typeparam>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Input`1.Value">
+            <summary>
+            Evaluate this input.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Input`1.op_Implicit(Facepunch.ActionGraphs.Input{`0})~`0">
+            <summary>
+            Evaluate this input.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.NodeKind">
+            <summary>
+            Nodes can be lazily evaluated expression without any signals,
+            or actions that execute when receiving a signal.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.NodeKind.Expression">
+            <summary>
+            A lazily evaluated node without any signals.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.NodeKind.Action">
+            <summary>
+            A node that performs an action when receiving an input signal.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Signal">
+            <summary>
+            Node inputs and outputs of this type will transmit signals rather than values.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.NodeDefinition">
+            <summary>
+            Describes the behaviour and bindings of a node for use in an action graph.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeDefinition.#ctor(Facepunch.ActionGraphs.NodeLibrary,System.String)">
+            <summary>
+            Describes the behaviour and bindings of a node for use in an action graph.
+            </summary>
+            <param name="nodeLibrary">Node library that will contain this node definition.</param>
+            <param name="identifier">Unique identifier of this node definition.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeDefinition.NodeLibrary">
+            <summary>
+            Node library containing this node definition.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeDefinition.Identifier">
+            <summary>
+            Unique identifier of this node definition.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeDefinition.DisplayInfo">
+            <summary>
+            Title, description, and categorizing information about the node definition.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeDefinition.Attributes">
+            <summary>
+            Attributes attached to this node definition.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeDefinition.IsObsolete">
+            <summary>
+            True if this definition has an <see cref="T:System.ObsoleteAttribute"/>.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeDefinition.Bind(Facepunch.ActionGraphs.BindingSurface)">
+            <summary>
+            Attempts to get a binding based on property values and input types. Bindings are
+            typed sets of named properties, inputs, and outputs. If a valid binding wasn't found,
+            the result will contain messages explaining why.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeDefinition.OnBind(Facepunch.ActionGraphs.BindingSurface)">
+            <inheritdoc cref="M:Facepunch.ActionGraphs.NodeDefinition.Bind(Facepunch.ActionGraphs.BindingSurface)"/>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeDefinition.ToString">
+            <summary>
+            Returns the identifier of this node definition.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.ParameterFlags.Missing">
+            <summary>
+            We don't have a valid definition for this parameter.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.ParameterFlags.Required">
+            <summary>
+            This parameter must have a value / link, and has no default value.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.ParameterFlags.Primary">
+            <summary>
+            This is the primary input / output signal.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.PropertyFlags.Missing">
+            <inheritdoc cref="F:Facepunch.ActionGraphs.ParameterFlags.Missing"/>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.PropertyFlags.Required">
+            <inheritdoc cref="F:Facepunch.ActionGraphs.ParameterFlags.Required"/>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.PropertyFlags.AlwaysSerialize">
+            <summary>
+            Always serialize this property, even if it has the default value.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.InputFlags.Missing">
+            <inheritdoc cref="F:Facepunch.ActionGraphs.ParameterFlags.Missing"/>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.InputFlags.Required">
+            <inheritdoc cref="F:Facepunch.ActionGraphs.ParameterFlags.Required"/>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.InputFlags.Primary">
+            <inheritdoc cref="F:Facepunch.ActionGraphs.ParameterFlags.Primary"/>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.InputFlags.Target">
+            <summary>
+            This input represents the <c>this</c> parameter of a method.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.InputFlags.NotAlwaysAccessed">
+            <summary>
+            This input is conditionally accessed, so its source should be lazily evaluated.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.InputFlags.NoCaching">
+            <summary>
+            This input should be evaluated each time it is accessed, instead of being cached.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.OutputFlags.Missing">
+            <inheritdoc cref="F:Facepunch.ActionGraphs.ParameterFlags.Missing"/>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.OutputFlags.Primary">
+            <inheritdoc cref="F:Facepunch.ActionGraphs.ParameterFlags.Primary"/>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.OutputFlags.AlwaysInvoked">
+            <summary>
+            This output signal will always be triggered.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.OutputFlags.NotAwaited">
+            <summary>
+            The containing node won't await this output signal's completion.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.IParameterDefinition">
+            <summary>
+            Base interface for <see cref="T:Facepunch.ActionGraphs.PropertyDefinition"/>, <see cref="T:Facepunch.ActionGraphs.InputDefinition"/> and
+            <see cref="T:Facepunch.ActionGraphs.OutputDefinition"/>.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IParameterDefinition.Name">
+            <summary>
+            Parameter name.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IParameterDefinition.Display">
+            <summary>
+            Display info about this parameter.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IParameterDefinition.Type">
+            <summary>
+            Value type stored / transmitted by this parameter.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IParameterDefinition.IsRequired">
+            <summary>
+            If true, a value must be provided for this parameter otherwise a validation
+            error will be generated.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IParameterDefinition.IsMissing">
+            <summary>
+            If true, this parameter wasn't found on the current node binding.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.IParameterDefinition.Attributes">
+            <summary>
+            If this parameter was generated by reflection, contains the attributes of the source member.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.PropertyDefinition">
+            <summary>
+            Describes a property of a node that should be configurable in the inspector.
+            </summary>
+            <param name="Name">Name used to reference this property.</param>
+            <param name="Type">What type is accepted for this property.</param>
+            <param name="Display">Optional title and description of the property.</param>
+            <param name="Default">If <see cref="P:Facepunch.ActionGraphs.PropertyDefinition.IsRequired"/> is false, this value will be used when no value is provided.</param>
+            <param name="GenericParameter">If <see cref="P:Facepunch.ActionGraphs.PropertyDefinition.Type"/> is <see cref="T:System.Type"/>, can hold a generic parameter constraining the type.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.PropertyDefinition.#ctor(System.String,System.Type,Facepunch.ActionGraphs.PropertyFlags,Facepunch.ActionGraphs.DisplayInfo,System.Object,System.Type,System.Collections.Generic.IReadOnlyCollection{System.Attribute})">
+            <summary>
+            Describes a property of a node that should be configurable in the inspector.
+            </summary>
+            <param name="Name">Name used to reference this property.</param>
+            <param name="Type">What type is accepted for this property.</param>
+            <param name="Display">Optional title and description of the property.</param>
+            <param name="Default">If <see cref="P:Facepunch.ActionGraphs.PropertyDefinition.IsRequired"/> is false, this value will be used when no value is provided.</param>
+            <param name="GenericParameter">If <see cref="P:Facepunch.ActionGraphs.PropertyDefinition.Type"/> is <see cref="T:System.Type"/>, can hold a generic parameter constraining the type.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.PropertyDefinition.Name">
+            <summary>Name used to reference this property.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.PropertyDefinition.Type">
+            <summary>What type is accepted for this property.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.PropertyDefinition.Display">
+            <summary>Optional title and description of the property.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.PropertyDefinition.Default">
+            <summary>If <see cref="P:Facepunch.ActionGraphs.PropertyDefinition.IsRequired"/> is false, this value will be used when no value is provided.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.PropertyDefinition.GenericParameter">
+            <summary>If <see cref="P:Facepunch.ActionGraphs.PropertyDefinition.Type"/> is <see cref="T:System.Type"/>, can hold a generic parameter constraining the type.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.PropertyDefinition.IsRequired">
+            <inheritdoc cref="F:Facepunch.ActionGraphs.ParameterFlags.Required"/>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.PropertyDefinition.IsMissing">
+            <inheritdoc cref="F:Facepunch.ActionGraphs.ParameterFlags.Missing"/>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.PropertyDefinition.AlwaysSerialize">
+            <inheritdoc cref="F:Facepunch.ActionGraphs.PropertyFlags.AlwaysSerialize"/>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.InputDefinition">
+            <summary>
+            Describes an input of a node.
+            </summary>
+            <param name="Name">Name used to reference this input.</param>
+            <param name="Type">What type is accepted in this input. For input signals, this will be <see cref="T:Facepunch.ActionGraphs.Signal"/>.</param>
+            <param name="Display">Optional title and description of the input.</param>
+            <param name="Default">If <see cref="P:Facepunch.ActionGraphs.InputDefinition.IsRequired"/> is false, this value will be used when no value is provided.</param>
+            <param name="UsedBy">Input signals that use this input.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.InputDefinition.#ctor(System.String,System.Type,Facepunch.ActionGraphs.InputFlags,Facepunch.ActionGraphs.DisplayInfo,System.Collections.Generic.IReadOnlySet{System.String},System.Object,System.Collections.Generic.IReadOnlyCollection{System.Attribute})">
+            <summary>
+            Describes an input of a node.
+            </summary>
+            <param name="Name">Name used to reference this input.</param>
+            <param name="Type">What type is accepted in this input. For input signals, this will be <see cref="T:Facepunch.ActionGraphs.Signal"/>.</param>
+            <param name="Display">Optional title and description of the input.</param>
+            <param name="Default">If <see cref="P:Facepunch.ActionGraphs.InputDefinition.IsRequired"/> is false, this value will be used when no value is provided.</param>
+            <param name="UsedBy">Input signals that use this input.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.InputDefinition.Name">
+            <summary>Name used to reference this input.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.InputDefinition.Type">
+            <summary>What type is accepted in this input. For input signals, this will be <see cref="T:Facepunch.ActionGraphs.Signal"/>.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.InputDefinition.Display">
+            <summary>Optional title and description of the input.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.InputDefinition.UsedBy">
+            <summary>Input signals that use this input.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.InputDefinition.Default">
+            <summary>If <see cref="P:Facepunch.ActionGraphs.InputDefinition.IsRequired"/> is false, this value will be used when no value is provided.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.InputDefinition.IsSignal">
+            <summary>
+            If true, this input receives a signal that will cause the parent node
+            to act.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.InputDefinition.IsArray">
+            <summary>
+            If true, this input accepts an array of values. Each element
+            can be connected to a different output.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.InputDefinition.ElementType">
+            <summary>
+            For array input types, the type of an element of the array.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.OutputDefinition">
+            <summary>
+            Describes an output of a node.
+            </summary>
+            <param name="Name">Name used to reference this output.</param>
+            <param name="Type">What type is returned by this output. For signals, this will be <see cref="T:Facepunch.ActionGraphs.Signal"/>.</param>
+            <param name="Display">Optional title and description of the output.</param>
+            <param name="ProvidedBy">This output is only valid when one of these output signals fires. If empty, it's always valid.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.OutputDefinition.#ctor(System.String,System.Type,Facepunch.ActionGraphs.OutputFlags,Facepunch.ActionGraphs.DisplayInfo,System.Collections.Generic.IReadOnlySet{System.String},System.Collections.Generic.IReadOnlyCollection{System.Attribute})">
+            <summary>
+            Describes an output of a node.
+            </summary>
+            <param name="Name">Name used to reference this output.</param>
+            <param name="Type">What type is returned by this output. For signals, this will be <see cref="T:Facepunch.ActionGraphs.Signal"/>.</param>
+            <param name="Display">Optional title and description of the output.</param>
+            <param name="ProvidedBy">This output is only valid when one of these output signals fires. If empty, it's always valid.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.OutputDefinition.Name">
+            <summary>Name used to reference this output.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.OutputDefinition.Type">
+            <summary>What type is returned by this output. For signals, this will be <see cref="T:Facepunch.ActionGraphs.Signal"/>.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.OutputDefinition.Display">
+            <summary>Optional title and description of the output.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.OutputDefinition.ProvidedBy">
+            <summary>This output is only valid when one of these output signals fires. If empty, it's always valid.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.OutputDefinition.IsSignal">
+            <summary>
+            If true, this output emits signals that can trigger other nodes
+            to act.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.DisplayInfo">
+            <summary>
+            Display information of a <see cref="T:Facepunch.ActionGraphs.NodeDefinition"/>.
+            </summary>
+            <param name="Title">Display name of the node.</param>
+            <param name="Description">Helpful text explaining the usage of the node.</param>
+            <param name="Group">Category to help organize the node.</param>
+            <param name="Icon">Material icon for this node.</param>
+            <param name="Hidden">If true, don't show this node definition in editor UI.</param>
+            <param name="Tags">Set of tags to help organize the node.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DisplayInfo.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.Boolean},System.String[])">
+            <summary>
+            Display information of a <see cref="T:Facepunch.ActionGraphs.NodeDefinition"/>.
+            </summary>
+            <param name="Title">Display name of the node.</param>
+            <param name="Description">Helpful text explaining the usage of the node.</param>
+            <param name="Group">Category to help organize the node.</param>
+            <param name="Icon">Material icon for this node.</param>
+            <param name="Hidden">If true, don't show this node definition in editor UI.</param>
+            <param name="Tags">Set of tags to help organize the node.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.DisplayInfo.Title">
+            <summary>Display name of the node.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.DisplayInfo.Description">
+            <summary>Helpful text explaining the usage of the node.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.DisplayInfo.Group">
+            <summary>Category to help organize the node.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.DisplayInfo.Icon">
+            <summary>Material icon for this node.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.DisplayInfo.Hidden">
+            <summary>If true, don't show this node definition in editor UI.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.DisplayInfo.Tags">
+            <summary>Set of tags to help organize the node.</summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DisplayInfo.ParameterPattern">
+            <remarks>
+            Pattern:<br/>
+            <code>\\{\\s*(?&lt;name&gt;[a-zA-Z_]+)\\s*(?:\\:\\s*(?&lt;format&gt;[^}|]+\\s*))?(?:\\|\\s*(?&lt;default&gt;[^}]*)\\s*)?\\}</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match '{'.<br/>
+            ○ Match a whitespace character atomically any number of times.<br/>
+            ○ "name" capture group.<br/>
+                ○ Match a character in the set [A-Z_a-z] greedily at least once.<br/>
+            ○ Match a whitespace character greedily any number of times.<br/>
+            ○ Optional (greedy).<br/>
+                ○ Match ':'.<br/>
+                ○ Match a whitespace character greedily any number of times.<br/>
+                ○ "format" capture group.<br/>
+                    ○ Match a character in the set [^|}] greedily at least once.<br/>
+                    ○ Match a whitespace character greedily any number of times.<br/>
+            ○ Optional (greedy).<br/>
+                ○ Match '|'.<br/>
+                ○ Match a whitespace character greedily any number of times.<br/>
+                ○ "default" capture group.<br/>
+                    ○ Match a character other than '}' greedily any number of times.<br/>
+                ○ Match a whitespace character atomically any number of times.<br/>
+            ○ Match '}'.<br/>
+            </code>
+            </remarks>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.TitleAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.ITitleAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.DescriptionAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.IDescriptionAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.GroupAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.IGroupAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.IconAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.IIconAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.HiddenAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.IHiddenAttribute" />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.TagsAttribute">
+            <inheritdoc cref="T:Facepunch.ActionGraphs.ITagsAttribute" />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.StringExtensions.ToTitleCase(System.String)">
+            <summary>
+            Convert a variable name to something more user friendly.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.IGraphLoader.LoadGraph(System.String)">
+            <summary>
+            Attempts to read a serialized <see cref="T:Facepunch.ActionGraphs.ActionGraph"/> from a path.
+            </summary>
+            <param name="path">Path describing the location of a serialized graph.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultGraphLoader.LoadGraph(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.FileSystemGraphLoader.LoadGraph(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ReflectionExtensions.GetGenericInstanceType(System.Type,System.Type)">
+            <summary>
+            Given a <paramref name="type"/> that possibly extends a <paramref name="genericType"/> definition,
+            get the generic instance type so we know what the type parameters are. Returns null if the given type
+            doesn't actually extend the generic type.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ExpressionExtensions.Coerce(System.Linq.Expressions.Expression,System.Type)">
+            <summary>
+            Generates an expression that coerces a value to the given type.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ExpressionExtensions.ContinueWith(System.Linq.Expressions.Expression,System.Linq.Expressions.Expression,System.String)">
+            <summary>
+            Concatenate two expressions, each of which may return a <see cref="T:System.Threading.Tasks.Task"/>, with the
+            final value being the result of the latter expression.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ExpressionExtensions.ReadFromDictionaryExpression(System.Linq.Expressions.Expression,System.String,System.Type,System.Linq.Expressions.Expression)">
+            <summary>
+            Generates an expression that reads a named value from a <see cref="T:System.Collections.Generic.IReadOnlyDictionary`2"/>.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Link">
+            <summary>
+            A link connects one <see cref="T:Facepunch.ActionGraphs.Node.Input"/> to a <see cref="T:Facepunch.ActionGraphs.Node.Output"/>.
+            They can either transmit values or signals. A signal will trigger the receiving
+            node to act when the sending node fires its output.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Link.Target">
+            <summary>
+            The receiving node's input.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Link.Source">
+            <summary>
+            Where this link retrieves its value from.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Link.ActionGraph">
+            <summary>
+            The action graph containing this link.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Link.IsSignal">
+            <summary>
+            If true, this link will transmit a signal from an action
+            node to another.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Link.Type">
+            <summary>
+            The value type being transmitted by the link.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Link.TargetType">
+            <summary>
+            The value type the target requires from this link.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Link.IsArrayElement">
+            <summary>
+            If true, this link is supplying one element of an input that
+            accepts an array.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Link.ArrayIndex">
+            <summary>
+            If <see cref="P:Facepunch.ActionGraphs.Link.IsArrayElement"/> is true, this is the index
+            of the element in the receiving array.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Link.UserData">
+            <summary>
+            Arbitrary named values stored in this link, which will be included during
+            serialization. Values must be serializable to JSON.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Link.IsValid">
+            <summary>
+            Becomes false when this link is removed.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Link.StackTraceIdentifier">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Link.Collapse">
+            <summary>
+            Collapses any no-op nodes to find the root source of this link.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Link.Remove">
+            <summary>
+            Remove this link from the action graph, disconnecting it from
+            the source and target.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Link.TryGetConstant(System.Object@)">
+            <summary>
+            If this link is from a <see cref="T:Facepunch.ActionGraphs.Constant"/> source, return true
+            and output the constant value.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Link.TryGetVariable(Facepunch.ActionGraphs.Variable@)">
+            <summary>
+            If this link is from a <see cref="T:Facepunch.ActionGraphs.Variable"/> source, return true
+            and output the referenced variable.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Link.ToString">
+            <summary>
+            Returns a string with the format "Link({Source}, {Target})".
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Node">
+            <summary>
+            The main building block of an action graph. Represents either an action or expression.
+            An action node has input and output signals, and will act only when receiving a signal.
+            Expression nodes have only input and output values, and will be evaluated lazily when
+            one of its outputs is requested.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.Node._sourceModel">
+            <summary>
+            Keep hold of the model this node was deserialized from if there were any exceptions,
+            so we can safely round-trip serialize even in the worst case. This will get cleared
+            if any changes are made to the node.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.SortedIndex">
+            <summary>
+            Order of this node, such that any nodes linked to its inputs have a smaller index. Used during validation.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.ForceAsync">
+            <summary>
+            True if executing this node is async because one of its outputs involves running another async node. Used during validation.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.IsAsync">
+            <summary>
+            Does the execution of this node produce an async task. Used during validation.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Id">
+            <summary>
+            Unique id of this node in the containing <see cref="P:Facepunch.ActionGraphs.Node.ActionGraph"/>.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Parent">
+            <summary>
+            Parent of a nested node.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Children">
+            <summary>
+            Nodes that were created as children of this node.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Definition">
+            <summary>
+            Definition describing the behaviour and property / input / output bindings of this node.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.DisplayInfo">
+            <summary>
+            Display information for this node.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Attributes">
+            <summary>
+            Attributes provided by this node's current binding.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.UserData">
+            <summary>
+            Arbitrary named values stored in this node, which will be included during serialization.
+            Values must be serializable to JSON.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Properties">
+            <summary>
+            Constant named values stored in this node.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Inputs">
+            <summary>
+            Named inputs of this node, that may either link to the outputs of other nodes,
+            or be assigned a constant value.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Outputs">
+            <summary>
+            Named outputs of this node, that may link to the inputs of other nodes.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.VariableReferences">
+            <summary>
+            All properties or links that reference a variable.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Links">
+            <summary>
+            All current input and output links attached to this node.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.CanSkipSerialization">
+            <summary>
+            Nested constant / variable nodes are serialized as links.
+            We can also skip serializing nested nodes with no references.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.ActionGraph">
+            <summary>
+            Parent <see cref="P:Facepunch.ActionGraphs.Node.ActionGraph"/> of this node.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.StackTraceIdentifier">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.IsValid">
+            <summary>
+            Will become false if this node was removed from its action graph.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.MarkDirty">
+            <summary>
+            Notify the containing graph that this node needs updating.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Remove">
+            <summary>
+            Remove this node from the containing graph. Any links into or out of the
+            node will also be removed.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.ToString">
+            <summary>
+            Returns a string with the format "Node{ID}".
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Kind">
+            <summary>
+            Is this node an action or an expression?
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.SetParameters(System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object},System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object})">
+            <summary>
+            Sets the named properties and inputs to the given values.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.UpdateParameters">
+            <summary>
+            Immediately update this node's binding based on its input types and property values.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.IParameter.Node">
+            <summary>
+            The parent node of this parameter.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.IParameter.Name">
+            <summary>
+            The name of this parameter.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.IParameter.Definition">
+            <summary>
+            Current definition of this parameter, including type and
+            display information.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.IParameter.Type">
+            <summary>
+            Value type of this parameter.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.IParameter.Display">
+            <summary>
+            Display info for this parameter.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.IParameter.Attributes">
+            <summary>
+            If this parameter was generated using reflection, contains the attributes
+            attached to the reflected member.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Node.Parameter`1">
+            <summary>
+            Base class for properties, inputs, and outputs of nodes.
+            </summary>
+            <typeparam name="T">Definition type for this parameter.</typeparam>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Parameter`1.Definition">
+            <inheritdoc cref="P:Facepunch.ActionGraphs.Node.IParameter.Definition" />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Parameter`1.IsMissing">
+            <inheritdoc cref="P:Facepunch.ActionGraphs.IParameterDefinition.IsMissing"/>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Parameter`1.Node">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Parameter`1.Name">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Parameter`1.StackTraceIdentifier">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Parameter`1.Type">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Parameter`1.Display">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Parameter`1.Attributes">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Parameter`1.ToString">
+            <summary>
+            Returns A string with the format "{Node}.{Name}".
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Node.Property">
+            <summary>
+            A named constant value stored inside a node.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Property.IsVariable">
+            <summary>
+            If true, this property references a <see cref="T:Facepunch.ActionGraphs.Variable"/>.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Property.Value">
+            <summary>
+            Constant value assigned to this parameter.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Property.TryGetValue(System.Object@)">
+            <summary>
+            Attempts to get either the current assigned value, or default value
+            for optional properties. Returns false if this property is required
+            and has no assigned value.
+            </summary>
+            <param name="value">Current assigned or default value.</param>
+            <returns>True if this node has an assigned or default value.</returns>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Property.GetValueOrDefault">
+            <summary>
+            Attempts to get either the current assigned value, or default value
+            for optional properties. Throws an exception if this property is
+            required and has no assigned value.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Property.GetValueOrDefault``1">
+            <summary>
+            Attempts to get either the current assigned value, or default value
+            for optional properties. Throws an exception if this property is
+            required and has no assigned value, or the assigned value is the
+            wrong type.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Node.Input">
+            <summary>
+            A named input of a node. Inputs can connect to outputs of other nodes,
+            or have a constant value. Use <see cref="!:SetLink(LinkSource)"/> to set which output
+            this input links to, or <see cref="!:SetLinks(LinkSource[])"/> if this input
+            can accept an array of values.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Input.IsArray">
+            <summary>
+            If true, this input accepts an array of values. Each element
+            can be connected to a different output with <see cref="M:Facepunch.ActionGraphs.Node.Input.InsertLink(Facepunch.ActionGraphs.ILinkSource,System.Int32)"/>
+            or <see cref="!:SetLinks(Output[])"/>.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Input.IsSignal">
+            <summary>
+            If true, this input receives a signal that will cause the parent node
+            to act.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Input.IsLinked">
+            <summary>
+            If true, this input is linked to an output.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Input.SourceType">
+            <summary>
+            Gets the type arriving in this input. Returns null if unlinked.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Input.Link">
+            <summary>
+            If this is linked to a single output, gets that link.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Input.LinkArray">
+            <summary>
+            If this is linked to an array of outputs, gets the connecting links.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Input.Links">
+            <summary>
+            Gets any links connected to this input.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Input.ElementType">
+            <summary>
+            For array input types, the type of an element of the array.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Input.Value">
+            <summary>
+            Constant source value for this input.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Input.IndexOfLink(Facepunch.ActionGraphs.Link)">
+            <summary>
+            If this input is connected to an array of outputs, gets the index
+            of the given link in that array. Returns -1 if not found.
+            </summary>
+            <param name="link">Link to get the index of.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Input.ClearLinks">
+            <summary>
+            Removes all links from this input.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Input.SetLink(Facepunch.ActionGraphs.ILinkSource)">
+            <summary>
+            Clears any existing links or constant value, and sets this input to be linked to the given output.
+            </summary>
+            <param name="source">Output to link to.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Input.SetLink(Facepunch.ActionGraphs.ILinkSource,System.Int32)">
+            <summary>
+            If this input accepts an array of links, replaces a link in that array to the given output.
+            </summary>
+            <param name="source">Output to link to.</param>
+            <param name="index">Index into the link array to set the link.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Input.InsertLink(Facepunch.ActionGraphs.ILinkSource,System.Int32)">
+            <summary>
+            If this input accepts an array of links, inserts a link in that array to the given output.
+            </summary>
+            <param name="source">Output to link to.</param>
+            <param name="index">Index into the link array to insert the link.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Input.SetLinks(Facepunch.ActionGraphs.ILinkSource[])">
+            <summary>
+            If this input accepts an array of links, clears any existing links or constant value and sets
+            this input to be linked to the given array of outputs.
+            </summary>
+            <param name="sources">Array of outputs to link to.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Node.Input.SetLinks(System.Collections.Generic.IReadOnlyList{Facepunch.ActionGraphs.ILinkSource})">
+            <summary>
+            If this input accepts an array of links, clears any existing links or constant value and sets
+            this input to be linked to the given array of outputs.
+            </summary>
+            <param name="sources">Array of outputs to link to.</param>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Node.Output">
+            <summary>
+            A named output of a node. Use <see cref="!:Input.SetLink(LinkSource)"/>,
+            or <see cref="!:Input.SetLinks(LinkSource[])"/> to connect this
+            output to an input.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Output.IsSignal">
+            <summary>
+            If true, this output emits signals that can trigger other nodes
+            to act.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Output.InvokesAsync">
+            <summary>
+            Are any nodes invoked by this output async? Used during validation.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Output.Links">
+            <summary>
+            All links currently connected to this output.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Node.Output.IsLinked">
+            <summary>
+            If true, this output has at least one connected input.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ParameterNames">
+            <summary>
+            Special names for parameters of built-in node types.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.NodeProperties">
+            <summary>
+            Constant named values stored in a node.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeProperties.Variable">
+            <summary>
+            Used by:
+            <list type="bullet">
+            <item><description><see cref="!:NodeLibrary.GetVar"/></description></item>
+            <item><description><see cref="!:NodeLibrary.SetVar"/></description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeProperties.Type">
+            <summary>
+            Used by:
+            <list type="bullet">
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.Property"/></description></item>
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.CallMethod"/></description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeProperties.Name">
+            <summary>
+            Used by:
+            <list type="bullet">
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.Property"/></description></item>
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.CallMethod"/></description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeProperties.IsStatic">
+            <summary>
+            Used by:
+            <list type="bullet">
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.Property"/></description></item>
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.CallMethod"/></description></item>
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.Output"/></description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeProperties.Kind">
+            <summary>
+            Used by:
+            <list type="bullet">
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.Property"/></description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeProperties.Value">
+            <summary>
+            Used by:
+            <list type="bullet">
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.Constant"/></description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.NodeInputs">
+            <summary>
+            Named inputs of a node, that may either link to the outputs of other nodes,
+            or be assigned a constant value.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeInputs.Signal">
+            <summary>
+            Used by <see cref="F:Facepunch.ActionGraphs.NodeKind.Action"/> nodes.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeInputs.Target">
+            <summary>
+            Used by:
+            <list type="bullet">
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.Property"/></description></item>
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.CallMethod"/></description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeInputs.Result">
+            <summary>
+            Used by:
+            <list type="bullet">
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.Output"/></description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeInputs.Value">
+            <summary>
+            Used by:
+            <list type="bullet">
+            <item><description><see cref="P:Facepunch.ActionGraphs.NodeLibrary.Property"/></description></item>
+            <item><description><see cref="!:NodeLibrary.SetVar"/></description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeInputs.Links">
+            <summary>
+            All current links into inputs of this node.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.NodeOutputs">
+            <summary>
+            Named outputs of a node, that may link to the inputs of other nodes.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeOutputs.Signal">
+            <summary>
+            Used by <see cref="F:Facepunch.ActionGraphs.NodeKind.Action"/> nodes.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeOutputs.Result">
+            <summary>
+            Default output of most nodes that produce a single value.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeOutputs.Links">
+            <summary>
+            All current links from outputs of this node.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.NodeBinding">
+            <summary>
+            A collection of named node properties, inputs, and outputs with specific types, as
+            provided by a <see cref="T:Facepunch.ActionGraphs.NodeDefinition"/>. Bindings may depend on the property values
+            or currently linked input types of a node.
+            </summary>
+            <param name="DisplayInfo">Display information for the bound node.</param>
+            <param name="Properties">Named constant values stored in a node.</param>
+            <param name="Inputs">Named inputs that can be provided either from the outputs of other nodes, or with constant values.</param>
+            <param name="Outputs">Named outputs that can be connected to the inputs of other nodes.</param>
+            <param name="Messages">Can contain warnings or errors if this binding isn't fully valid.</param>
+            <param name="Target">Optional binding target data used by <see cref="M:Facepunch.ActionGraphs.NodeDefinition.BuildExpression(Facepunch.ActionGraphs.Compilation.INodeExpressionBuilder)"/>.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeBinding.#ctor(Facepunch.ActionGraphs.DisplayInfo,System.Collections.Generic.IReadOnlyCollection{Facepunch.ActionGraphs.PropertyDefinition},System.Collections.Generic.IReadOnlyCollection{Facepunch.ActionGraphs.InputDefinition},System.Collections.Generic.IReadOnlyCollection{Facepunch.ActionGraphs.OutputDefinition},System.Collections.Generic.IReadOnlyCollection{Facepunch.ActionGraphs.NodeBinding.ValidationMessage},System.Collections.Generic.IReadOnlyCollection{System.Attribute},System.Boolean,System.Object)">
+            <summary>
+            A collection of named node properties, inputs, and outputs with specific types, as
+            provided by a <see cref="T:Facepunch.ActionGraphs.NodeDefinition"/>. Bindings may depend on the property values
+            or currently linked input types of a node.
+            </summary>
+            <param name="DisplayInfo">Display information for the bound node.</param>
+            <param name="Properties">Named constant values stored in a node.</param>
+            <param name="Inputs">Named inputs that can be provided either from the outputs of other nodes, or with constant values.</param>
+            <param name="Outputs">Named outputs that can be connected to the inputs of other nodes.</param>
+            <param name="Messages">Can contain warnings or errors if this binding isn't fully valid.</param>
+            <param name="Target">Optional binding target data used by <see cref="M:Facepunch.ActionGraphs.NodeDefinition.BuildExpression(Facepunch.ActionGraphs.Compilation.INodeExpressionBuilder)"/>.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeBinding.DisplayInfo">
+            <summary>Display information for the bound node.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeBinding.Properties">
+            <summary>Named constant values stored in a node.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeBinding.Inputs">
+            <summary>Named inputs that can be provided either from the outputs of other nodes, or with constant values.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeBinding.Outputs">
+            <summary>Named outputs that can be connected to the inputs of other nodes.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeBinding.Messages">
+            <summary>Can contain warnings or errors if this binding isn't fully valid.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeBinding.Target">
+            <summary>Optional binding target data used by <see cref="M:Facepunch.ActionGraphs.NodeDefinition.BuildExpression(Facepunch.ActionGraphs.Compilation.INodeExpressionBuilder)"/>.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeBinding.Kind">
+            <summary>
+            Is this node an action or an expression?
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.NodeBinding.ValidationMessage">
+            <summary>
+            A message generated when attempting to bind a set of named property values and input types.
+            Becomes a <see cref="T:Facepunch.ActionGraphs.ValidationMessage"/> during action graph validation.
+            </summary>
+            <param name="Context">Which property, input or output this message is relevant to.</param>
+            <param name="Level">Message severity.</param>
+            <param name="Value">Message content.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeBinding.ValidationMessage.#ctor(Facepunch.ActionGraphs.IParameterDefinition,Facepunch.ActionGraphs.MessageLevel,System.String,System.Object)">
+            <summary>
+            A message generated when attempting to bind a set of named property values and input types.
+            Becomes a <see cref="T:Facepunch.ActionGraphs.ValidationMessage"/> during action graph validation.
+            </summary>
+            <param name="Context">Which property, input or output this message is relevant to.</param>
+            <param name="Level">Message severity.</param>
+            <param name="Value">Message content.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeBinding.ValidationMessage.Context">
+            <summary>Which property, input or output this message is relevant to.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeBinding.ValidationMessage.Level">
+            <summary>Message severity.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeBinding.ValidationMessage.Value">
+            <summary>Message content.</summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.AddAssemblyResult">
+            <summary>
+            Returned by <see cref="M:Facepunch.ActionGraphs.NodeLibrary.AddAssembly(System.Reflection.Assembly)"/>.
+            </summary>
+            <param name="AlreadyAdded">If true, this assembly was previously added so it was skipped.</param>
+            <param name="Errors">Any exceptions thrown when attempting to add methods can be found here.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.AddAssemblyResult.#ctor(System.Boolean,System.Collections.Generic.IReadOnlyDictionary{System.Reflection.MemberInfo,System.Exception})">
+            <summary>
+            Returned by <see cref="M:Facepunch.ActionGraphs.NodeLibrary.AddAssembly(System.Reflection.Assembly)"/>.
+            </summary>
+            <param name="AlreadyAdded">If true, this assembly was previously added so it was skipped.</param>
+            <param name="Errors">Any exceptions thrown when attempting to add methods can be found here.</param>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.AddAssemblyResult.AlreadyAdded">
+            <summary>If true, this assembly was previously added so it was skipped.</summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.AddAssemblyResult.Errors">
+            <summary>Any exceptions thrown when attempting to add methods can be found here.</summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.NodeLibrary">
+            <summary>
+            Contains a library of <see cref="T:Facepunch.ActionGraphs.NodeDefinition"/>s, each with a unique identifier.
+            Custom node definitions can be added with <see cref="M:Facepunch.ActionGraphs.NodeLibrary.Add(Facepunch.ActionGraphs.NodeDefinition)"/>, or from methods marked with
+            either <see cref="!:ActionNodeAttribute"/> or <see cref="!:ExpressionNodeAttribute"/> when
+            using <see cref="M:Facepunch.ActionGraphs.NodeLibrary.AddAssembly(System.Reflection.Assembly)"/>.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeLibrary.#ctor(Facepunch.ActionGraphs.ITypeLoader,Facepunch.ActionGraphs.IGraphLoader)">
+            <summary>
+            Contains a library of <see cref="T:Facepunch.ActionGraphs.NodeDefinition"/>s, each with a unique identifier.
+            An <see cref="T:Facepunch.ActionGraphs.ITypeLoader"/> is required to wrap reflection methods. Use an <see cref="T:Facepunch.ActionGraphs.DefaultTypeLoader"/>
+            if no access control is needed.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.All">
+            <summary>
+            Dictionary of all added definitions, indexed by their <see cref="P:Facepunch.ActionGraphs.NodeDefinition.Identifier"/>s.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.Input">
+            <summary>
+            Node definition for the entry point of the graph. Each graph can only have one such entry point.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.InputValue">
+            <summary>
+            Helper node for accessing a graph input parameter.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.Output">
+            <summary>
+            Node definition for output signals of the graph. Each graph can have at most one primary output.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.Graph">
+            <summary>
+            A node implemented by an action graph.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.Variable">
+            <summary>
+            Node definition for getting or setting <see cref="P:Facepunch.ActionGraphs.NodeLibrary.Variable"/> values.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.Constant">
+            <summary>
+            Node definition for providing constant values.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.Property">
+            <summary>
+            Node definition for getting or setting static or instance properties.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.CallMethod">
+            <summary>
+            Node definition for calling a named method.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.NewInstance">
+            <summary>
+            Node definition for calling a constructor to create an instance.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.NoOperation">
+            <summary>
+            A node that does nothing, just forwards an input to its output.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.NodeLibrary.Comment">
+            <summary>
+            A node with no inputs or outputs, only metadata. Useful for holding documentation.
+            </summary>
+        </member>
+        <member name="E:Facepunch.ActionGraphs.NodeLibrary.VoidTaskFaulted">
+            <summary>
+            Invoked when an async graph, invoked as a delegate returning <see cref="T:System.Void"/>,
+            throws an exception.
+            </summary>
+        </member>
+        <member name="E:Facepunch.ActionGraphs.NodeLibrary.ActionGraphCreated">
+            <summary>
+            Event dispatched whenever an <see cref="T:Facepunch.ActionGraphs.ActionGraph"/> belonging to this node library is created.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeLibrary.Add(Facepunch.ActionGraphs.NodeDefinition)">
+            <summary>
+            Add a custom node definition. The <see cref="P:Facepunch.ActionGraphs.NodeDefinition.Identifier"/> must be unique
+            in this library. See also <see cref="M:Facepunch.ActionGraphs.NodeLibrary.AddAssembly(System.Reflection.Assembly)"/> for an easier way to implement custom nodes.
+            </summary>
+            <param name="definition">Custom node definition to add.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeLibrary.AddAssembly(System.Reflection.Assembly)">
+            <summary>
+            Adds a node definition for each method annotated with either <see cref="!:ActionNodeAttribute"/> or
+            <see cref="T:Facepunch.ActionGraphs.ExpressionNodeDefinition"/> in the given assembly.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeLibrary.Get(System.String)">
+            <summary>
+            Gets a node definition by identifier. Returns null if not found.
+            </summary>
+            <param name="identifier">Unique identifier of the node definition to find.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeLibrary.Get``1(``0)">
+            <summary>
+            Gets a node definition by the method that implements it. Method must already
+            be added with <see cref="M:Facepunch.ActionGraphs.NodeLibrary.AddAssembly(System.Reflection.Assembly)"/>.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeLibrary.Get(System.Type,System.String)">
+            <inheritdoc cref="M:Facepunch.ActionGraphs.NodeLibrary.Get``1(``0)"/>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeLibrary.Get(System.Reflection.MethodInfo)">
+            <inheritdoc cref="M:Facepunch.ActionGraphs.NodeLibrary.Get``1(``0)"/>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeLibrary.Get(System.Linq.Expressions.ExpressionType)">
+            <summary>
+            Gets a node definition by the operator it implements.
+            </summary>
+            <param name="expressionType">Operator of the node definition to find.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeLibrary.Reset">
+            <summary>
+            Removes all custom node definitions from this library.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeLibrary.IsPure(System.Reflection.MethodBase)">
+            <summary>
+            Returns true if the given method has been marked as pure. Pure methods
+            have no (visible) side effects, and so can be turned into expression nodes.
+            </summary>
+            <param name="method">Method to test.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.NodeLibrary.IsProperty(System.Reflection.ParameterInfo)">
+            <summary>
+            Returns true if the given parameter should be a property on a node, rather than
+            an input or output.
+            </summary>
+            <param name="parameter">Parameter to test.</param>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Nodes.ControlFlow">
+            <summary>
+            Nodes providing basic control flow structures like branches and loops.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Nodes.ControlFlow.Body">
+            <summary>
+            An action to perform in a branch or loop.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Nodes.ControlFlow.ForEachBody`1">
+            <summary>
+            Output signal for a <see cref="M:Facepunch.ActionGraphs.Nodes.ControlFlow.ForEach``1(System.Collections.Generic.IEnumerable{``0},Facepunch.ActionGraphs.Nodes.ControlFlow.ForEachBody{``0})"/> node, fired for each element of an enumerable.
+            </summary>
+            <typeparam name="T">Element type.</typeparam>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Nodes.ControlFlow.ForRangeBody">
+            <summary>
+            Output signal for a <see cref="M:Facepunch.ActionGraphs.Nodes.ControlFlow.ForRange(Facepunch.ActionGraphs.Nodes.ControlFlow.ForRangeBody,System.Int32,System.Int32,System.Int32)"/> node, fired for each value in the range.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Nodes.Math">
+            <summary>
+            Nodes relating to numbers and geometry.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Null">
+            <summary>
+            Represents a null reference.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.JsonExtensions">
+            <summary>
+            Extension methods for <see cref="N:System.Text.Json"/> types.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.JsonExtensions.AddActionGraphConverters(System.Text.Json.JsonSerializerOptions,Facepunch.ActionGraphs.NodeLibrary)">
+            <summary>
+            Adds the ability for this <see cref="T:System.Text.Json.JsonSerializerOptions"/> to convert <see cref="T:Facepunch.ActionGraphs.ActionGraph"/>,
+            <see cref="!:ActionGraph&lt;T&gt;"/>, and <see cref="T:System.Delegate"/> instances implemented with action graphs.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.JsonExtensions.AddActionGraphConverters(System.Text.Json.JsonSerializerOptions,Facepunch.ActionGraphs.GetNodeLibraryDelegate)">
+            <summary>
+            Adds the ability for this <see cref="T:System.Text.Json.JsonSerializerOptions"/> to convert <see cref="T:Facepunch.ActionGraphs.ActionGraph"/>,
+            <see cref="!:ActionGraph&lt;T&gt;"/>, and <see cref="T:System.Delegate"/> instances implemented with action graphs.
+            </summary>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.ITypeLoader">
+            <summary>
+            An implementation of this interface will wrap reflection calls, allowing
+            custom access control. See <see cref="T:Facepunch.ActionGraphs.DefaultTypeLoader"/> for a default implementation
+            with no access control.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.TypeToIdentifier(System.Type)">
+            <summary>
+            Gets an identifier string that can later be used by <see cref="M:Facepunch.ActionGraphs.ITypeLoader.TypeFromIdentifier(System.String)"/> to
+            deserialize a type instance.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.TypeFromIdentifier(System.String)">
+            <summary>
+            Load a type from an identifier, as produced by <see cref="M:Facepunch.ActionGraphs.ITypeLoader.TypeToIdentifier(System.Type)"/>.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.GetProperty(System.Type,System.String)">
+            <summary>
+            Gets a named property declared on the given type. Should
+            return null if the property isn't found, or if it isn't allowed to be accessed.
+            </summary>
+            <param name="declaringType">Declaring type that contains the property.</param>
+            <param name="name">Property name.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.GetField(System.Type,System.String)">
+            <summary>
+            Gets a named field declared on the given type. Should
+            return null if the field isn't found, or if it isn't allowed to be accessed.
+            </summary>
+            <param name="declaringType">Declaring type that contains the field.</param>
+            <param name="name">Field name.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.CanRead(System.Reflection.PropertyInfo)">
+            <summary>
+            Returns true if <see cref="T:Facepunch.ActionGraphs.ActionGraph"/> is allowed to read from this property.
+            Basic checks, like if a get method exists, will have already been performed.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.CanWrite(System.Reflection.PropertyInfo)">
+            <summary>
+            Returns true if <see cref="T:Facepunch.ActionGraphs.ActionGraph"/> is allowed to write to this property.
+            Basic checks, like if a set method exists, will have already been performed.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.CanRead(System.Reflection.FieldInfo)">
+            <summary>
+            Returns true if <see cref="T:Facepunch.ActionGraphs.ActionGraph"/> is allowed to read from this field.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.CanWrite(System.Reflection.FieldInfo)">
+            <summary>
+            Returns true if <see cref="T:Facepunch.ActionGraphs.ActionGraph"/> is allowed to read from this field.
+            Basic checks, like if it is marked <see cref="P:System.Reflection.FieldInfo.IsInitOnly"/>, will
+            have already been performed.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.GetConstructors(System.Type)">
+            <summary>
+            Gets all constructors declared on the given type.
+            </summary>
+            <param name="declaringType">Declaring type that contains the constructors.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.GetMethods(System.Type,System.String)">
+            <summary>
+            Gets all methods with the given name declared on the given type.
+            </summary>
+            <param name="declaringType">Declaring type that contains the methods.</param>
+            <param name="name">Method name.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.GetNestedType(System.Type,System.String)">
+            <summary>
+            Gets a nested type from its name and the containing type. Should
+            return null if the type isn't found, or if it isn't allowed to be accessed.
+            </summary>
+            <param name="declaringType">Declaring type that contains the nested type.</param>
+            <param name="name">Short name of the nested type, not the fully qualified name.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.MakeArrayType(System.Type,System.Nullable{System.Int32})">
+            <summary>
+            Makes an array type from the given element type and optional rank. Should
+            throw an exception if creating such an array is forbidden.
+            </summary>
+            <param name="elementType">Type of each element in the array.</param>
+            <param name="rank">Optional number of dimensions of the array.</param>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.ITypeLoader.MakeGenericType(System.Type,System.Type[])">
+            <summary>
+            Makes a generic instance type from the given generic type definition and type
+            arguments. Should throw an exception if the arguments aren't valid for the generic
+            type definition, or if creating such a type is forbidden.
+            </summary>
+            <param name="genericTypeDefinition">Generic type definition with one or more open type parameters.</param>
+            <param name="genericArguments">Type arguments to use when creating the generic instance type.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Facepunch.ActionGraphs.DefaultTypeLoader">
+            <summary>
+            A default implementation of <see cref="T:Facepunch.ActionGraphs.ITypeLoader"/> with no access control.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.TypeToIdentifier(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.TypeFromIdentifier(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.GetProperty(System.Type,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.GetField(System.Type,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.CanRead(System.Reflection.PropertyInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.CanWrite(System.Reflection.PropertyInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.CanRead(System.Reflection.FieldInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.CanWrite(System.Reflection.FieldInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.GetConstructors(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.GetMethods(System.Type,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.GetNestedType(System.Type,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.MakeArrayType(System.Type,System.Nullable{System.Int32})">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.MakeGenericType(System.Type,System.Type[])">
+            <inheritdoc />
+        </member>
+        <member name="M:Facepunch.ActionGraphs.DefaultTypeLoader.CanCache(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="T:Facepunch.ActionGraphs.Variable">
+            <summary>
+            Variables have a name and type, and are local to each invocation of an <see cref="P:Facepunch.ActionGraphs.Variable.ActionGraph"/>.
+            They are assigned with a <see cref="!:NodeLibrary.SetVar"/> node, and read with <see cref="!:NodeLibrary.GetVar"/>.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Variable.Name">
+            <summary>
+            The name of this variable, unique in its action graph.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Variable.Type">
+            <summary>
+            Value type stored in this variable.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Variable.DefaultValue">
+            <summary>
+            Initial value of the variable before being assigned.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Variable.UserData">
+            <summary>
+            Arbitrary named values stored in this variable, which will be included during
+            serialization. Values must be serializable to JSON.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Variable.References">
+            <summary>
+            All node properties that currently reference this variable.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Variable.ActionGraph">
+            <summary>
+            The action graph this variable belongs to.
+            </summary>
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Variable.StackTraceIdentifier">
+            <inheritdoc />
+        </member>
+        <member name="P:Facepunch.ActionGraphs.Variable.IsValid">
+            <summary>
+            Becomes false when this variable is removed.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Variable.Remove">
+            <summary>
+            Remove this variable from its action graph.
+            This will clear any references to it.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Variable.ToString">
+            <summary>
+            Returns the name of the variable.
+            </summary>
+        </member>
+        <member name="F:Facepunch.ActionGraphs.Variable._sourceType">
+            <summary>
+            Keep hold of the node the variable type was deserialized from if there were any exceptions,
+            so we can safely round-trip serialize even in the worst case. This will get cleared
+            if any changes are made to the variable.
+            </summary>
+        </member>
+        <member name="M:Facepunch.ActionGraphs.Versions.Version3.ReplaceExpandedOutputsWithChildNodes(System.Text.Json.Nodes.JsonObject,Facepunch.ActionGraphs.NodeLibrary,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Replace legacy expanded output system with parented nodes.
+            Expanded outputs generated outputs with names like "output.X" to get the "X" property of "output".
+            </summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.ParameterPattern_0">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the ParameterPattern method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.ParameterPattern_0.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ParameterPattern_0.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.ParameterPattern_0.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ParameterPattern_0.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.ParameterPattern_0.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ParameterPattern_0.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ParameterPattern_0.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ParameterPattern_0.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.Utilities">
+            <summary>Helper methods used by generated <see cref="T:System.Text.RegularExpressions.Regex"/>-derived implementations.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout">
+            <summary>Default timeout value set in <see cref="T:System.AppContext"/>, or <see cref="F:System.Text.RegularExpressions.Regex.InfiniteMatchTimeout"/> if none was set.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_hasTimeout">
+            <summary>Whether <see cref="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout"/> is non-infinite.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPop(System.Int32[],System.Int32@,System.Int32@,System.Int32@)">
+            <summary>Pops 2 values from the backtracking stack.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPush(System.Int32[]@,System.Int32@,System.Int32)">
+            <summary>Pushes 1 value onto the backtracking stack.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPush(System.Int32[]@,System.Int32@,System.Int32,System.Int32)">
+            <summary>Pushes 2 values onto the backtracking stack.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPush(System.Int32[]@,System.Int32@,System.Int32,System.Int32,System.Int32)">
+            <summary>Pushes 3 values onto the backtracking stack.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_ascii_FEFFFF87FEFFFF07">
+            <summary>Supports searching for characters in or not in "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".</summary>
+        </member>
+    </members>
+</doc>

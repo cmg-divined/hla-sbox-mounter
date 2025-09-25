@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sandbox.Access</name>
+    </assembly>
+    <members>
+        <member name="M:Sandbox.AccessControl.TrustUnsafe(System.Byte[])">
+            <summary>
+            Dangerous! Create a <see cref="T:Sandbox.TrustedBinaryStream"/> of the given stream
+            without actually passing it through access control.
+            </summary>
+        </member>
+        <member name="M:Sandbox.AccessControl.VerifyAssembly(System.IO.Stream,Sandbox.TrustedBinaryStream@,System.Boolean)">
+            <summary>
+            Returns true if assembly is fine. Previous errors are cleared at the start of this method
+            so only new Errors are set if returning false.
+            </summary>
+            <param name="dll"></param>
+            <param name="outStream"><see cref="T:Sandbox.TrustedBinaryStream"/> wrapper around <paramref name="dll"/>.
+            Will close if <paramref name="dll"/> gets closed.</param>
+            <param name="addToWhitelist"></param>
+        </member>
+        <member name="M:Sandbox.AccessControl.InitTouches(System.Byte[])">
+            <summary>
+            Clear the touches and fill them with everything this dll touches
+            </summary>
+        </member>
+        <member name="M:Sandbox.AccessControl.ForgetAssembly(System.String)">
+            <summary>
+            If we're definitely never going to see this assembly again (because it's being unloaded for instance)
+            We can totally get rid of it and free all that lovely memory.
+            </summary>
+        </member>
+        <member name="M:Sandbox.AccessControl.ForgetOlderAssemblyDefinitions(System.Reflection.AssemblyName)">
+            <summary>
+            Forget all versions of the named assembly strictly older than this one.
+            </summary>
+        </member>
+        <member name="M:Sandbox.AccessControl.ForgetOlderAssemblyDefinitions(Mono.Cecil.AssemblyNameReference)">
+            <summary>
+            Forget all versions of the named assembly strictly older than this one.
+            </summary>
+        </member>
+        <member name="M:Sandbox.AccessControl.RemoveLocalTouches">
+            <summary>
+            Remove touches that are inside addon depends or this dll.
+            </summary>
+        </member>
+        <member name="F:Sandbox.AccessControl.skipMethods">
+            <summary>
+            These methods show up a lot and unexplitable, easy to skip
+            </summary>
+        </member>
+        <member name="M:Sandbox.AccessRules.IsInWhitelist(System.String)">
+            <summary>
+            Returns true if call is in the whitelist
+            </summary>
+        </member>
+        <member name="T:Sandbox.TrustedBinaryStream">
+            <summary>
+            Wraps a stream containing a binary that has passed access control.
+            </summary>
+        </member>
+        <member name="M:Sandbox.TrustedBinaryStream.CreateInternal(System.Byte[])">
+            <summary>
+            This should only be used by access control!
+            </summary>
+        </member>
+    </members>
+</doc>

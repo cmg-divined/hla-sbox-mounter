@@ -1,0 +1,1385 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sandbox.Reflection</name>
+    </assembly>
+    <members>
+        <member name="T:ExposeAttribute">
+            <summary>
+            <para>
+            If set on a type, it (and its descendants) can be created
+            and manipulated via the TypeLibrary system, and therefore also in action graphs.
+            </para>
+            <para>
+            Note that this is only useful for our internal libraries because
+            everything in compiled (addons) assemblies is accessible anyway.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Sandbox.DisplayInfo">
+            <summary>
+            Collects all the relevant info (such as description, name, icon, etc) from attributes and other sources about a type or type member.
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.ClassName">
+            <summary>
+            "Internal" class name of this type or member. This typically should be all lowercase and without weird symbols or whitespace.
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.Namespace">
+            <summary>
+            Namespace of this type
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.Fullname">
+            <summary>
+            Namespace.ParentClass.Class.Member
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.Name">
+            <summary>
+            The name of this type or member.
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.Description">
+            <summary>
+            The summary or description of this type or member.
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.Group">
+            <summary>
+            Group or category of this type or member. (<see cref="T:CategoryAttribute"/>)
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.ReadOnly">
+            <summary>
+            This is marked as ReadOnly
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.Icon">
+            <summary>
+            Material icon of this type or member. (<see cref="T:IconAttribute"/>)
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.Order">
+            <summary>
+            Order of this member for UI ordering purposes. (<see cref="T:OrderAttribute"/>)
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.Browsable">
+            <summary>
+            Whether this member should be visible in a properties sheet (<see cref="T:HideInEditorAttribute"/>)
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.Placeholder">
+            <summary>
+            Placeholder text for string type properties. (<see cref="T:PlaceholderAttribute"/>)
+            Placeholder text is displayed in UI when input text field is empty.
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.Alias">
+            <summary>
+            Possible aliases for this type or member, if any. (<see cref="T:AliasAttribute"/>)
+            </summary>
+        </member>
+        <member name="F:Sandbox.DisplayInfo.Tags">
+            <summary>
+            Tags of this type or member. (<see cref="T:TagAttribute"/>)
+            </summary>
+        </member>
+        <member name="M:Sandbox.DisplayInfo.HasTag(System.String)">
+            <summary>
+            Returns whether this type or member has given tag. (<see cref="T:TagAttribute"/>)
+            </summary>
+            <param name="t">The tag to test.</param>
+            <returns>Whether the tag is present or not</returns>
+        </member>
+        <member name="M:Sandbox.DisplayInfo.ForType(System.Type,System.Boolean)">
+            <summary>
+            Retrieves display info about a given type.
+            </summary>
+            <param name="t">The type to look up display info for.</param>
+            <param name="inherit">Whether to load in base type's display info first, then overrides all possible fields with given type's information.</param>
+            <returns>The display info. Will contain empty fields on failure.</returns>
+        </member>
+        <member name="M:Sandbox.DisplayInfo.For(System.Object,System.Boolean)">
+            <summary>
+            Retrieves display info about a given objects type.
+            </summary>
+            <param name="t">The type to look up display info for.</param>
+            <param name="inherit">Whether to load in base type's display info first, then overrides all possible fields with given type's information.</param>
+            <returns>The display info. Will contain empty fields on failure.</returns>
+        </member>
+        <member name="M:Sandbox.DisplayInfo.ForMember(System.Reflection.MemberInfo,System.Boolean)">
+            <summary>
+            Retrieves display info about a given member or type.
+            </summary>
+            <param name="t">The member to look up display info for.</param>
+            <param name="inherit">If member given is a <see cref="T:System.Type"/>, loads in base type's display info first, then overrides all possible fields with given type's information.</param>
+            <returns>The display info. Will contain empty fields on failure.</returns>
+        </member>
+        <member name="M:Sandbox.DisplayInfo.ForEnumValues(System.Type)">
+            <summary>
+            Returns display info for each member of an enumeration type.
+            </summary>
+        </member>
+        <member name="M:Sandbox.DisplayInfo.ForEnumValues``1">
+            <summary>
+            Returns display info for each member of an enumeration type.
+            </summary>
+        </member>
+        <member name="M:Sandbox.DisplayInfo.InterfaceTypeNameRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>^I[A-Z]</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match if at the beginning of the string.<br/>
+            ○ Match 'I'.<br/>
+            ○ Match a character in the set [A-Z].<br/>
+            </code>
+            </remarks>
+        </member>
+        <member name="M:Sandbox.DisplayInfo.EventMethodNameRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>^On[A-Z]</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match if at the beginning of the string.<br/>
+            ○ Match the string "On".<br/>
+            ○ Match a character in the set [A-Z].<br/>
+            </code>
+            </remarks>
+        </member>
+        <member name="M:Sandbox.ReflectionExtensions.LoadFromStreamWithEmbeds(System.Runtime.Loader.AssemblyLoadContext,System.IO.Stream)">
+            <summary>
+            The assembly might have a pdb embedded inside. So load it with PEReader and have a look inside to see if it
+            is in there. Then if it is, load the assembly with the pdb.
+            I don't know why this isn't done by default.. but apparently it's not. So we have to do it manually.
+            </summary>
+        </member>
+        <member name="M:Sandbox.ReflectionExtensions.GetEventInfo(System.Reflection.FieldInfo)">
+            <summary>
+            Try to get the event for which this member is a backing field.
+            </summary>
+        </member>
+        <member name="M:Sandbox.ReflectionExtensions.GetInheritedConstructedGenericType(System.Type,System.Type)">
+            <summary>
+            Looks through the inheritance hierarchy of <paramref name="type"/>, including its
+            implemented interfaces, for constructed instances of <paramref name="genericTypeDef"/>.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Internal.IControlSheet">
+            <summary>
+            Interface for a control sheet that manages the display of serialized properties in a structured way.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.IControlSheet.FilterSortAndAdd(Sandbox.Internal.IControlSheet,System.Collections.Generic.List{Sandbox.SerializedProperty},System.Boolean)">
+            <summary>
+            Adds properties to the control sheet, filtering them based on the provided filter function.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.IControlSheet.AddProperties(Sandbox.Internal.IControlSheet,System.Collections.Generic.List{Sandbox.SerializedProperty},System.Boolean)">
+            <summary>
+            Add properties to a controlsheet, with a minimal of filtering and no sorting.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.IControlSheet.RemoveUnusedMethods(System.Collections.Generic.List{Sandbox.SerializedProperty})">
+            <summary>
+            Remove methods that we have no hope of displaying
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.IControlSheet.AddFeature(Sandbox.Internal.IControlSheet.Feature)">
+            <summary>
+            We're adding a feature. Normally would store these in a tab control
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.IControlSheet.AddGroup(Sandbox.Internal.IControlSheet.Group)">
+            <summary>
+            We're adding a group. Normally would have a Group Panel with the properties as children
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.IControlSheet.TestFilter(Sandbox.SerializedProperty)">
+            <summary>
+            Implement to filter properties that should be displayed in the control sheet.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Internal.IControlSheet.Feature">
+            <summary>
+            A feature is usually displayed as a tab, to break things up in the inspector. They can sometimes be turned on and off.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Internal.IControlSheet.Feature.Name">
+            <summary>
+            The name of the feature, usually displayed as a tab title in the inspector.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Internal.IControlSheet.Feature.Description">
+            <summary>
+            The description of the feature
+            </summary>
+        </member>
+        <member name="P:Sandbox.Internal.IControlSheet.Feature.Icon">
+            <summary>
+            The icon of the feature
+            </summary>
+        </member>
+        <member name="P:Sandbox.Internal.IControlSheet.Feature.Tint">
+            <summary>
+            Allows tinting this feature, for some reason
+            </summary>
+        </member>
+        <member name="P:Sandbox.Internal.IControlSheet.Feature.Properties">
+            <summary>
+            The properties that are part of this feature, usually displayed together in the inspector.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Internal.IControlSheet.Feature.EnabledProperty">
+            <summary>
+            If we have a FeatureEnabled property, this will be it. If not then we assume it should always be enabled.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Internal.IControlSheet.Group">
+            <summary>
+            A group is a collection of properties that are related to each other, and can be displayed together in the inspector, usually with a title.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Internal.IControlSheet.Group.Name">
+            <summary>
+            The name of the group, usually displayed as a title in the inspector.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Internal.IControlSheet.Group.Properties">
+            <summary>
+            The properties that are part of this group, usually displayed together in the inspector.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetAttributes``1">
+            <summary>
+            Get all attributes of this type
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetTypesWithAttribute``1">
+            <summary>
+            Get all attributes of this type. Returns the type description along with the attribute. This will 
+            also return types that inherit the attribute from base classes too.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetTypesWithAttribute``1(System.Boolean)">
+            <summary>
+            Get all attributes of this type. Returns the type description along with the attribute.
+            If inherited is false, we will return only classes that contain this attribute directly.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetAttribute``1(System.Type)">
+            <summary>
+            Get single attribute of type, from type
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetAttributes``1(System.Type)">
+            <summary>
+            Get all attribute of type, from all types assignable to type
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.Cached``1(System.Int32,System.Func{``0})">
+            <summary>
+            Get or cache the result
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.InvalidateCache">
+            <summary>
+            Clear the cache. Should be called when types are added or removed.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.AssertType(System.Type)">
+            <summary>
+            Will throw an exception if the type isn't in the whitelist
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.IsAllowedType(System.Type)">
+            <summary>
+            We're allowed to use the type if we know about it
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.Create(System.String,System.Type,System.Object[])">
+            <summary>
+            Create a type instance by name and is assignable to given type, with optional arguments for its constructor.
+            </summary>
+            <param name="name">Name of the type to create.</param>
+            <param name="targetType">Type "constraint", as in the type instance must be assignable to this given type.</param>
+            <param name="args">Optional arguments for the constructor of the selected type.</param>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.Create``1(System.Type,System.Object[])">
+            <summary>
+            Create type instance from type.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.Create``1(System.String,System.Boolean)">
+            <summary>
+            Create a type instance by name and is assignable to given type.
+            </summary>
+            <param name="name">Name of the type to create.</param>
+            <param name="complainOnMissing">Display a warning when requested type name was not found.</param>
+            <typeparam name="T">Type "constraint", as in the type instance must be assignable to this given type.</typeparam>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.Create``1(System.String,System.Object[],System.Boolean)">
+            <summary>
+            Create a type instance by name and is assignable to given type.
+            </summary>
+            <param name="name">Name of the type to create.</param>
+            <param name="complainOnMissing">Display a warning when requested type name was not found.</param>
+            <param name="args"></param>
+            <typeparam name="T">Type "constraint", as in the type instance must be assignable to this given type.</typeparam>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.Create``1(System.Int32)">
+            <summary>
+            Create a type instance by its identity. See <see cref="M:Sandbox.Internal.TypeLibrary.GetIdent(System.Type)"/>.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.CreateGeneric``1(System.Type,System.Type,System.Object[])">
+            <summary>
+            Create type by type
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetMethodsWithAttribute``1(System.Boolean)">
+            <summary>
+            Find all methods with given attribute, optionally non static
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.FindStaticMethods(System.String)">
+            <summary>
+            Find all static methods with given name.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.FindStaticMethods``1(System.String)">
+            <summary>
+            Find all static methods with given name and given attribute.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetMemberAttributes``1">
+            <summary>
+            Find all member attributes (instances) with given attribute type.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetMembersWithAttribute``1">
+            <summary>
+            Find all static members with given attribute.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetMemberAttributes``1(System.Boolean)">
+            <summary>
+            Find all static or non static only member attributes (instances) with given attribute type.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetPropertyDescriptions(System.Object,System.Boolean)">
+            <summary>
+            Get a list of properties on the target object. To do this we'll just call GetDescription( obj.GetType() ) and return .Properties.
+            Will return an empty array if we can't access these properties.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.SetProperty(System.Object,System.String,System.Object)">
+            <summary>
+            Set a named property on given object.
+            Will perform extra magic for string inputs and try to convert to target property type.
+            </summary>
+            <param name="target">The target object to set a named property on.</param>
+            <param name="name">Name of the property to set.</param>
+            <param name="value">Value for the property.</param>
+            <returns>Whether the property was set or not.</returns>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetPropertyValue(System.Object,System.String)">
+            <summary>
+            Try to get a value from a property on an object
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.ToBytes``1(``0)">
+            <summary>
+            Serialize this value to bytes, where possible
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.ToBytes``1(``0,Sandbox.ByteStream@)">
+            <summary>
+            Serialize this value to bytes, where possible
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.FromBytes``1(System.Byte[])">
+            <summary>
+            Deserialize this from bytes. 
+            If the type is unknown, T can be an object.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.FromBytes``1(System.ReadOnlySpan{System.Byte})">
+            <summary>
+            Deserialize this from bytes. 
+            If the type is unknown, T can be an object.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.FromBytes``1(Sandbox.ByteStream@)">
+            <summary>
+            Deserialize this from bytes. 
+            If the type is unknown, T can be an object.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Internal.TypeLibrary.Editor">
+            <summary>
+            The editor's TypeLibrary contains the game's typelibrary as well as all the editor types. 
+            This is null when not running in editor mode!
+            </summary>
+        </member>
+        <member name="F:Sandbox.Internal.TypeLibrary.OnClassName">
+            <summary>
+            Called to populate StringTokens with our custom tokens in c#
+            </summary>
+        </member>
+        <member name="F:Sandbox.Internal.TypeLibrary.log">
+            <summary>
+            The current TypeLibrary. God we could make TypeLibrary a big sexy static class how awesome would that be.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Internal.TypeLibrary.Types">
+            <summary>
+            A list of loaded types.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.Dispose">
+            <summary>
+            Clean up after ourselves
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.AddIntrinsicTypes">
+            <summary>
+            Add essential types from <c>System</c> assemblies, for example
+            <see cref="T:System.Object"/>, <see cref="T:System.String"/>, and <see cref="T:System.Int32"/>.
+            Only public members of these types will be added.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.AddAssembly(System.Reflection.Assembly,System.Boolean)">
+            <summary>
+            Add an assembly yo the library.
+            If marked as dynamic then all types are added.
+            </summary>
+        </member>
+        <member name="P:Sandbox.Internal.TypeLibrary.WhitelistedSystemMembers">
+            <summary>
+            For some system types we only want to expose a subset of public members. In the future
+            we should try to use the same whitelist as when checking user code, but that's a bit scary.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.TakeRemovedType(System.Type)">
+            <summary>
+            Find a type that was previously removed
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.StoreRemovedType(Sandbox.TypeDescription)">
+            <summary>
+            Store this type in the removed list, incase the assembly comes back. We
+            can re-initialize it - so all the references to it will be unchanged.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.ClearRemovedTypes">
+            <summary>
+            Removed all of the stored removed types
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.RemoveAssembly(System.Reflection.Assembly)">
+            <summary>
+            Remove a specific assembly and all types associated with it
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetTypeIdent(System.Type)">
+            <summary>
+            Get hash of a type.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetType(System.Type)">
+            <summary>
+            Get the description for a specific type. This will return null if you don't have whitelist access to the type.
+            For constructed generic types, this will give you the description of the generic type definition.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetGenericTypes(System.Type,System.Type[])">
+            <summary>
+            Get a list of types that implement this generic type
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetTypes(System.Type)">
+            <summary>
+            Get descriptions for all types that derive from T
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetType``1(System.String)">
+            <summary>
+            Find a TypeDescription that derives from <typeparamref name="T"/>, by name
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetType``1(System.String,System.Boolean)">
+            <summary>
+            Find a TypeDescription that derives from T by name, which can be an Alias etc.
+            If preferAddonAssembly is true, then if there are conflicts we'll prefer types that are 
+            in addon code.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetType(System.Type,System.String,System.Boolean)">
+            <summary>
+            Find a TypeDescription that derives from T by name, which can be an Alias etc.
+            If preferAddonAssembly is true, then if there are conflicts we'll prefer types that are 
+            in addon code.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetTypes``1">
+            <summary>
+            Get descriptions for all types that derive from T
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetTypes">
+            <summary>
+            Get all types
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetType``1">
+            <summary>
+            Find the description for templated type
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.TryGetType(System.Type,Sandbox.TypeDescription@)">
+            <summary>
+            Find the description type
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.TryGetType``1(Sandbox.TypeDescription@)">
+            <summary>
+            Find the description type
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetType(System.String)">
+            <summary>
+            Find a TypeDescription by name
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetTypeByIdent(System.Int32)">
+            <summary>
+            Find a TypeDescription by name
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetMemberByIdent(System.Int32)">
+            <summary>
+            Find a <see cref="T:Sandbox.MemberDescription"/> by its <see cref="P:Sandbox.MemberDescription.Identity"/>
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetType(System.String,System.Type)">
+            <summary>
+            Find a TypeDescription that derives from <paramref name="baseType"/>, by name
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetGenericArguments(System.Type)">
+            <summary>
+            Performs <see cref="M:System.Type.GetGenericArguments"/> with access control checks.
+            Will throw if any arguments aren't in the whitelist.
+            </summary>
+            <param name="genericType">Constructed generic type to get the arguments of</param>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.HasAttribute``1(System.Type)">
+            <summary>
+            Return true if this type contains this attribute
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.CheckValidationAttributes``1(``0)">
+            <summary>
+            Check if all properties of this class instance pass their <see cref="T:System.ComponentModel.DataAnnotations.ValidationAttribute"/>.
+            </summary>
+            <param name="obj">Object to test.</param>
+            <returns>True if all properties pass their validity checks (or if there are no checks), false otherwise.</returns>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetSerializedObject(System.Object)">
+            <summary>
+            Get a SerializedObject version of this object
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetSerializedObject(System.Func{System.Object},Sandbox.TypeDescription,Sandbox.SerializedProperty)">
+            <summary>
+            Gets a SerializedObject version of a value retrieved from a function.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetSerializedObjectDictionary``1(Sandbox.CaseInsensitiveDictionary{System.String})">
+            <summary>
+            Get a SerializedObject version of this type of object, but data is stored in a dictionary
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetSerializedObjectDictionary(System.Type,Sandbox.CaseInsensitiveDictionary{System.String})">
+            <summary>
+            Get a SerializedObject version of this type of object, but data is stored in a dictionary
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetEnumDescription(System.Type)">
+            <summary>
+            Get a class describing the values of an enum
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.CreateProperty``1(System.String,System.Func{``0},System.Action{``0},System.Attribute[],Sandbox.SerializedObject)">
+            <summary>
+            Create a serialized property that uses a getter and setter
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.CreateProperty``1(System.String,Sandbox.SerializedObject,System.Attribute[],Sandbox.SerializedObject)">
+            <summary>
+            Create a serialized property from a SerializedObject
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeLibrary.GetStaticMethods``1(System.String,System.String)">
+            <summary>
+            This is used primarily to get GlobalRpcHandler.OnRpc
+            </summary>
+        </member>
+        <member name="P:Sandbox.Internal.TypeLibrary.DynamicAssemblyHash">
+            <summary>
+            This is a hash of loaded assembly names. We can use it to make sure we're using
+            the same code as the server. This is important when it comes to things like decoding
+            network messages and datatables - because if the code is different we're going to
+            get errors, because it could expect different data.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Internal.IsolatedAssemblyContext">
+            <summary>
+            This isolates the dll so it can be unloaded and can have the same name as other loaded dlls
+            </summary>
+        </member>
+        <member name="F:Sandbox.Internal.LoadContext.root">
+            <summary>
+            If the assembly isn't found in this context, we'll load from
+            the context used by the root Assembly.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.LoadContext.LoadWithEmbeds(System.Byte[],System.Boolean)">
+            <summary>
+            The assembly might have a pdb embedded inside. So load it with PEReader and have a look inside to see if it
+            is in there. Then if it is, load the assembly with the pdb.
+            I don't know why this isn't done by default.. but apparently it's not. So we have to do it manually.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Internal.DictionarySerializedObject">
+            <summary>
+            An implementation of TypeLibrary which uses TypeLibrary to fill out properties
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeSerializedField.GetAttributes">
+            <inheritdoc />
+        </member>
+        <member name="M:Sandbox.Internal.TypeSerializedField.TryGetAsObject(Sandbox.SerializedObject@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sandbox.Internal.TypeSerializedMethod.GetAttributes">
+            <inheritdoc />
+        </member>
+        <member name="T:Sandbox.Internal.TypeSerializedObject">
+            <summary>
+            An implementation of SerializedObject which uses TypeLibrary to fill out properties
+            </summary>
+        </member>
+        <member name="F:Sandbox.Internal.TypeSerializedObject.FetchTarget">
+            <summary>
+            If the object is a value type, we call a method to get the value each time before we change/update/read it.
+            If it's a class, we fetch it once and set FetchTarget to null.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeSerializedObject.GetTargetObject">
+            <summary>
+            Get the target object. If the target object is a value type, we'll
+            call FetchTarget() - which should fetch the latest copy of it from
+            the parent. 
+            Note that by design FetchTarget is null if it's not a value type.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeSerializedProperty.SetValue``1(``0,Sandbox.SerializedProperty)">
+            <summary>
+            When setting because a child property changed, we don't trigger NoteChanged
+            because the expectation is that the NoteChanged from setting that property
+            will instead propogate up, and will be more accurate.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.TypeSerializedProperty.GetAttributes">
+            <inheritdoc />
+        </member>
+        <member name="M:Sandbox.Internal.TypeSerializedProperty.TryGetAsObject(Sandbox.SerializedObject@)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Sandbox.Internal.SerializerPacker`1">
+            <summary>
+            A packer that handles serialization and deserialization for implementations of <see cref="T:Sandbox.BytePack.ISerializer"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Sandbox.Internal.SerializerPacker`1.Write(Sandbox.ByteStream@,System.Object)">
+            <summary>
+            Write an object to the <see cref="T:Sandbox.ByteStream"/> through the implementation of <see cref="M:Sandbox.BytePack.ISerializer.BytePackWrite(System.Object,Sandbox.ByteStream@)"/> for this type.
+            </summary>
+            <param name="bs"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Sandbox.Internal.SerializerPacker`1.Read(Sandbox.ByteStream@)">
+            <summary>
+            Read an object from the <see cref="T:Sandbox.ByteStream"/> through the implementation of <see cref="M:Sandbox.BytePack.ISerializer.BytePackRead(Sandbox.ByteStream@,System.Type)"/> for this type.
+            </summary>
+            <param name="bs"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sandbox.FieldDescription">
+             <summary>
+             Describes a field. We use this class to wrap and return <see cref="P:Sandbox.FieldDescription.FieldInfo">FieldInfo</see>'s that are safe to interact with.
+            
+             Returned by <see cref="T:Sandbox.Internal.TypeLibrary"/> and <see cref="T:Sandbox.TypeDescription"/>.
+             </summary>
+        </member>
+        <member name="P:Sandbox.FieldDescription.IsInitOnly">
+            <inheritdoc cref="P:System.Reflection.FieldInfo.IsInitOnly"/>
+        </member>
+        <member name="P:Sandbox.FieldDescription.FieldType">
+            <summary>
+            Property type.
+            </summary>
+        </member>
+        <member name="M:Sandbox.FieldDescription.GetValue(System.Object)">
+            <summary>
+            Get the value of this property on given object.
+            </summary>
+        </member>
+        <member name="M:Sandbox.FieldDescription.SetValue(System.Object,System.Object)">
+            <summary>
+            Set the value of this property on given object.
+            </summary>
+        </member>
+        <member name="T:Sandbox.IMemberAttribute">
+            <summary>
+            When applied to an attribute, which is them applied to a member..
+            This will make <see cref="P:Sandbox.IMemberAttribute.MemberDescription"/> set on the attribute upon load.
+            <para>This provides a convenient way to know which member the attribute was attached to.</para>
+            </summary>
+        </member>
+        <member name="P:Sandbox.IMemberAttribute.MemberDescription">
+            <summary>
+            Description of the member this attribute was attached to.
+            </summary>
+        </member>
+        <member name="T:Sandbox.MemberDescription">
+             <summary>
+             Wraps <see cref="F:Sandbox.MemberDescription.MemberInfo">MemberInfo</see> but with caching and sandboxing.
+            
+             Returned by <see cref="T:Sandbox.Internal.TypeLibrary"/> and <see cref="T:Sandbox.TypeDescription"/>.
+             </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.TypeDescription">
+            <summary>
+            The type that we're a member of
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.Ident">
+            <summary>
+            Unique identifier based on full name
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.Name">
+            <summary>
+            Name of this type member.
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.Identity">
+            <summary>
+            An integer that represents this member. Based off its type and name.
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.Title">
+            <summary>
+            Display name or title of this type member.
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.Description">
+            <summary>
+            Description of this type member. This usually provided from the summary XML comment above the definition.
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.Icon">
+            <summary>
+            The icon for this, if provided via the [Icon] attribute
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.Group">
+            <summary>
+            The group - usually provided via the [Group] attribute
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.ReadOnly">
+            <summary>
+            If this is marked as [ReadOnly]
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.Order">
+            <summary>
+            The display order - usually provided via the [Order] attribute
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.Tags">
+            <summary>
+            Tags are usually provided via the [Tags] attribute
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.Aliases">
+            <summary>
+            Aliases allow this to be found by alternative names.
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.Attributes">
+            <summary>
+            Attributes on this member
+            </summary>
+        </member>
+        <member name="M:Sandbox.MemberDescription.GetDisplayInfo">
+            <summary>
+            Access the full DisplayInfo for this type. This is faster than creating the DisplayInfo every time we need it.
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.IsStatic">
+            <summary>
+            True if static
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.IsPublic">
+            <summary>
+            True if publicly accessible
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.IsFamily">
+            <inheritdoc cref="P:System.Reflection.MethodBase.IsFamily"/>
+        </member>
+        <member name="P:Sandbox.MemberDescription.IsMethod">
+            <summary>
+            True if we're a method
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.IsProperty">
+            <summary>
+            True if we're a property
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.IsField">
+            <summary>
+            True if we're a field
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.SourceLine">
+            <summary>
+            The line number of this member
+            </summary>
+        </member>
+        <member name="P:Sandbox.MemberDescription.SourceFile">
+            <summary>
+            The file containing this member
+            </summary>
+        </member>
+        <member name="M:Sandbox.MemberDescription.GetIdentityHash">
+            <summary>
+            Generate a unique hash to identity this member.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sandbox.MemberDescription.IsNamed(System.String)">
+            <summary>
+            Utility function to check whether this string matches this type. Will search name and classname.
+            </summary>
+        </member>
+        <member name="M:Sandbox.MemberDescription.HasTag(System.String)">
+            <summary>
+            Returns true if Tags contains this tag
+            </summary>
+        </member>
+        <member name="M:Sandbox.MemberDescription.Create(Sandbox.TypeDescription,System.Reflection.MemberInfo,Sandbox.MemberDescription)">
+            <summary>
+            TODO - create MethodDescription?
+            </summary>
+        </member>
+        <member name="M:Sandbox.MemberDescription.HasAttribute``1">
+            <summary>
+            Whether or not this has at least one of the specified attribute.
+            </summary>
+        </member>
+        <member name="M:Sandbox.MemberDescription.HasAttribute(System.Type)">
+            <summary>
+            Whether or not this has at least one of the specified attribute.
+            </summary>
+        </member>
+        <member name="M:Sandbox.MemberDescription.GetCustomAttribute``1">
+            <summary>
+            Returns the first of Attributes of the passed in type. Or null.
+            </summary>
+        </member>
+        <member name="T:Sandbox.MethodDescription">
+             <summary>
+             Describes a method. We use this class to wrap and return <see cref="T:System.Reflection.MethodInfo">MethodInfo</see>'s that are safe to interact with.
+            
+             Returned by <see cref="T:Sandbox.Internal.TypeLibrary"/> and <see cref="T:Sandbox.TypeDescription"/>.
+             </summary>
+        </member>
+        <member name="P:Sandbox.MethodDescription.IsMethod">
+            <summary>
+            Returns true - because this is a method
+            </summary>
+        </member>
+        <member name="P:Sandbox.MethodDescription.IsSpecialName">
+            <inheritdoc cref="P:System.Reflection.MethodBase.IsSpecialName"/>
+        </member>
+        <member name="P:Sandbox.MethodDescription.IsVirtual">
+            <inheritdoc cref="P:System.Reflection.MethodBase.IsVirtual"/>
+        </member>
+        <member name="P:Sandbox.MethodDescription.ReturnType">
+            <summary>
+            Gets the return type of this method.
+            </summary>
+        </member>
+        <member name="P:Sandbox.MethodDescription.Parameters">
+            <summary>
+            Gets a list of parameters expected by this method
+            </summary>
+        </member>
+        <member name="M:Sandbox.MethodDescription.GetIdentityHash">
+            <inheritdoc />
+        </member>
+        <member name="M:Sandbox.MethodDescription.Invoke(System.Object,System.Object[])">
+            <summary>
+            Invokes this method.
+            </summary>
+            <param name="targetObject">Should be null if this is static, otherwise should be the object this is a member of.</param>
+            <param name="parameters">An array of parameters to pass. Should be the same length as Parameters</param>
+        </member>
+        <member name="M:Sandbox.MethodDescription.InvokeWithReturn``1(System.Object,System.Object[])">
+            <summary>
+            Invokes this method and returns a value.
+            </summary>
+            <param name="targetObject">Should be null if this is static, otherwise should be the object this is a member of.</param>
+            <param name="parameters">An array of parameters to pass. Should be the same length as Parameters</param>
+        </member>
+        <member name="M:Sandbox.MethodDescription.CreateDelegate``1">
+            <summary>
+            Creates a delegate bound to this method.
+            </summary>
+            <typeparam name="T">Delegate type</typeparam>
+        </member>
+        <member name="M:Sandbox.MethodDescription.CreateDelegate``1(System.Object)">
+            <summary>
+            Creates a delegate bound to this method.
+            </summary>
+            <typeparam name="T">Delegate type</typeparam>
+            <param name="target">Value for the first parameter / target object</param>
+        </member>
+        <member name="M:Sandbox.MethodDescription.CreateDelegate(System.Type)">
+            <summary>
+            Creates a delegate bound to this method.
+            </summary>
+            <param name="delegateType">Delegate type to create</param>
+        </member>
+        <member name="M:Sandbox.MethodDescription.CreateDelegate(System.Type,System.Object)">
+            <summary>
+            Creates a delegate bound to this method.
+            </summary>
+            <param name="delegateType">Delegate type to create</param>
+            <param name="target">Value for the first parameter / target object</param>
+        </member>
+        <member name="T:Sandbox.PropertyDescription">
+             <summary>
+             Describes a property. We use this class to wrap and return <see cref="P:Sandbox.PropertyDescription.PropertyInfo">PropertyInfo</see>'s that are safe to interact with.
+            
+             Returned by <see cref="T:Sandbox.Internal.TypeLibrary"/> and <see cref="T:Sandbox.TypeDescription"/>.
+             </summary>
+        </member>
+        <member name="P:Sandbox.PropertyDescription.CanWrite">
+            <summary>
+            Whether this property can be written to.
+            </summary>
+        </member>
+        <member name="P:Sandbox.PropertyDescription.CanRead">
+            <summary>
+            Whether this property can be read.
+            </summary>
+        </member>
+        <member name="P:Sandbox.PropertyDescription.IsGetMethodPublic">
+            <summary>
+            Whether the getter of this property is public.
+            </summary>
+        </member>
+        <member name="P:Sandbox.PropertyDescription.IsSetMethodPublic">
+            <summary>
+            Whether the setter of this property is public.
+            </summary>
+        </member>
+        <member name="P:Sandbox.PropertyDescription.PropertyType">
+            <summary>
+            Property type.
+            </summary>
+        </member>
+        <member name="P:Sandbox.PropertyDescription.IsIndexer">
+            <summary>
+            True if this property has index parameters
+            </summary>
+        </member>
+        <member name="M:Sandbox.PropertyDescription.GetValue(System.Object)">
+            <summary>
+            Get the value of this property on given object.
+            </summary>
+        </member>
+        <member name="M:Sandbox.PropertyDescription.SetValue(System.Object,System.Object)">
+            <summary>
+            Set the value of this property on given object.
+            </summary>
+        </member>
+        <member name="M:Sandbox.PropertyDescription.CheckValidationAttributes(System.Object,System.String[]@,System.String)">
+            <inheritdoc cref="M:Sandbox.SandboxSystemExtensions.CheckValidationAttributes(System.Reflection.PropertyInfo,System.Object,System.String[]@,System.String)"/>
+        </member>
+        <member name="M:Sandbox.ActionGraphs.ActionGraphExtensions.GetReferencedComponentTypes(Facepunch.ActionGraphs.ActionGraph)">
+            <summary>
+            Gets all component types referenced using "scene.get" nodes. These components are expected
+            to be on the GameObject containing the graph.
+            </summary>
+        </member>
+        <member name="T:Sandbox.ActionGraphs.TypeLoader">
+            <summary>
+            All action graph reflection goes through here, so we can control what people can access.
+            </summary>
+        </member>
+        <member name="M:Sandbox.ActionGraphs.TypeLoader.TypeToIdentifier(System.Type)">
+            <summary>
+            Used when an action graph serializes a <see cref="T:System.Type"/>. Must match <see cref="M:Sandbox.ActionGraphs.TypeLoader.TypeFromIdentifier(System.String)"/>.
+            </summary>
+        </member>
+        <member name="M:Sandbox.ActionGraphs.TypeLoader.TypeFromIdentifier(System.String)">
+            <summary>
+            Used when an action graph deserializes a <see cref="T:System.Type"/>. Must match <see cref="M:Sandbox.ActionGraphs.TypeLoader.TypeToIdentifier(System.Type)"/>.
+            </summary>
+        </member>
+        <member name="T:Sandbox.TypeDescription">
+             <summary>
+             Describes a type. We use this class to wrap and return <see cref="T:System.Type">System.Type</see>'s that are safe to interact with.
+            
+             Returned by <see cref="T:Sandbox.Internal.TypeLibrary"/>.
+             </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.TargetType">
+            <summary>
+            The type this class describes.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.BaseType">
+            <summary>
+            The base type. This can return null if the type isn't in the type library!
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.IsValid">
+            <summary>
+            Whether the class is valid or not, i.e. whether the type still exists.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.IsDynamicAssembly">
+            <summary>
+            Is from an assembly that was whitelist tested, so it can't have any bad stuff in it.
+            We can feel happy to expose all members in these assemblies.
+            </summary>
+        </member>
+        <member name="F:Sandbox.TypeDescription.Attributes">
+            <summary>
+            Attributes that we, and our bases, implement
+            </summary>
+        </member>
+        <member name="F:Sandbox.TypeDescription.OwnAttributes">
+            <summary>
+            Attributes that we implement directly
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Members">
+            <summary>
+            All members (methods, properties, etc) of this type.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.DeclaredMembers">
+            <summary>
+            Members (methods, properties, etc) declared by exactly this type, and not inherited.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Methods">
+            <summary>
+            All methods of this type.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Properties">
+            <summary>
+            All properties of this type.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Fields">
+            <summary>
+            All fields on this type.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.IsInterface">
+            <summary>
+            True if the target type is an interface
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.IsEnum">
+            <summary>
+            True if the target type is an enum
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.IsStatic">
+            <summary>
+            True if the target type is static
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.IsClass">
+            <summary>
+            True if the target type is a class
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.IsValueType">
+            <summary>
+            True if the target type is a value
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.IsAbstract">
+            <summary>
+            Gets a value indicating whether the System.Type is abstract and must be overridden.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Name">
+            <summary>
+            Name of this type.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Namespace">
+            <summary>
+            Namespace of this type.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.FullName">
+            <summary>
+            Full name of this type.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.SerializedName">
+            <summary>
+            Preferred name to use when serializing this type.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Title">
+            <inheritdoc cref="F:Sandbox.DisplayInfo.Name"/>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Description">
+            <inheritdoc cref="F:Sandbox.DisplayInfo.Description"/>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Icon">
+            <inheritdoc cref="F:Sandbox.DisplayInfo.Icon"/>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Group">
+            <inheritdoc cref="F:Sandbox.DisplayInfo.Group"/>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Order">
+            <inheritdoc cref="F:Sandbox.DisplayInfo.Order"/>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Tags">
+            <summary>
+            Tags are set via the [Tag] attribute
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Aliases">
+            <inheritdoc cref="F:Sandbox.DisplayInfo.Alias"/>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Identity">
+            <summary>
+            An integer that represents this type. Based off the class name.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.ClassName">
+            <summary>
+            A string representing this class name. Historically this was provided by [Library( classname )].
+            If no special name is provided, this will be type.Name.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.SourceLine">
+            <summary>
+            The line number of this member
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.SourceFile">
+            <summary>
+            The file containing this member
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.GetMemberIdentity(System.Reflection.MemberInfo)">
+            <summary>
+            This needs to generate a unique string per member on a type.
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.IsNamed(System.String)">
+            <summary>
+            Returns true if this is named the passed name, either through classname, target class name or an alias
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.GetAttribute``1(System.Boolean)">
+            <summary>
+            Returns the first attribute of given type, if any are present.
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.GetAttributes``1(System.Boolean)">
+            <summary>
+            Returns all attributes of given type, if any are present.
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.HasAttribute``1(System.Boolean)">
+            <summary>
+            Returns true if the class has this attribute
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.HasTag(System.String)">
+            <summary>
+            True if we have this tag.
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.GetProperty(System.String)">
+            <summary>
+            Get property by name
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.GetField(System.String)">
+            <summary>
+            Get field by name
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.GetValue(System.Object,System.String)">
+            <summary>
+            Get value by field or property name
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.GetValue(System.Object,System.String,System.Type@)">
+            <summary>
+            Get value by field or property name, and which type the member is declared to store.
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.SetValue(System.Object,System.String,System.Object)">
+            <summary>
+            Get value by field or property name
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.GetMethod(System.String)">
+            <summary>
+            Get a method by name (will not find static methods)
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.IsGenericType">
+            <summary>
+            True if we're a generic type
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.GenericArguments">
+            <summary>
+            If we're a generic type this will return our generic parameters.
+            </summary>
+        </member>
+        <member name="P:Sandbox.TypeDescription.Interfaces">
+            <summary>
+            If we implement any interfaces they will be here
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.Create``1(System.Object[])">
+            <summary>
+            Create an instance of this class, return it as a T.
+            If it can't be cast to a T we won't create it and will return null.
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.CreateGeneric``1(System.Type[],System.Object[])">
+            <summary>
+            Create an instance of this class using generic arguments
+            We're going to assume you know what you're doing here and let it throw any exceptions it wants.
+            </summary>
+        </member>
+        <member name="M:Sandbox.TypeDescription.MakeGenericType(System.Type[])">
+            <summary>
+            For generic type definitions, create a type by substituting the given types for each type parameter.
+            We're going to assume you know what you're doing here and let it throw any exceptions it wants.
+            </summary>
+        </member>
+        <member name="M:Sandbox.ReflectionUtility.PreJIT(System.Reflection.Assembly)">
+            <summary>
+            Pre-compile all of the methods that we can, to reduce the risk of them compiling during gameplay
+            </summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.InterfaceTypeNameRegex_0">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the InterfaceTypeNameRegex method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.InterfaceTypeNameRegex_0.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.InterfaceTypeNameRegex_0.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.InterfaceTypeNameRegex_0.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.InterfaceTypeNameRegex_0.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.InterfaceTypeNameRegex_0.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.InterfaceTypeNameRegex_0.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.InterfaceTypeNameRegex_0.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.InterfaceTypeNameRegex_0.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.EventMethodNameRegex_1">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the EventMethodNameRegex method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.EventMethodNameRegex_1.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.EventMethodNameRegex_1.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.EventMethodNameRegex_1.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.EventMethodNameRegex_1.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.EventMethodNameRegex_1.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.EventMethodNameRegex_1.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.EventMethodNameRegex_1.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.EventMethodNameRegex_1.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.Utilities">
+            <summary>Helper methods used by generated <see cref="T:System.Text.RegularExpressions.Regex"/>-derived implementations.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout">
+            <summary>Default timeout value set in <see cref="T:System.AppContext"/>, or <see cref="F:System.Text.RegularExpressions.Regex.InfiniteMatchTimeout"/> if none was set.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_hasTimeout">
+            <summary>Whether <see cref="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout"/> is non-infinite.</summary>
+        </member>
+    </members>
+</doc>

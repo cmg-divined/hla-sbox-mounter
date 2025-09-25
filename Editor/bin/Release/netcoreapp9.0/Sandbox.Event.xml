@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sandbox.Event</name>
+    </assembly>
+    <members>
+        <member name="T:Sandbox.Internal.EventSystem.EventClass">
+            <summary>
+            A Type with events on it
+            </summary>
+        </member>
+        <member name="T:Sandbox.Internal.EventSystem.EventAction">
+            <summary>
+            A method on a type
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.EventSystem.EventAction.Run(System.String,System.Object[])">
+            <summary>
+            Run this event action, aggregating any exceptions.
+            </summary>
+        </member>
+        <member name="T:Sandbox.Internal.EventSystem.EventList">
+            <summary>
+            A list of events, usually indexed by the event name
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.EventSystem.EventList.Run(System.String,System.Object[])">
+            <summary>
+            Run this event list, aggregating any exceptions.
+            </summary>
+        </member>
+        <member name="F:Sandbox.Internal.EventSystem.OrphanedInstances">
+            <summary>
+            Instances that have had their assembly removed. We keep them around becuase the
+            assembly might be re-registered.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.EventSystem.UnregisterAssembly(System.Reflection.Assembly)">
+            <summary>
+            Register an assembly. If old assembly is valid, we try to remove all of the old event hooks
+            from this assembly, while retaining a list of objects.
+            </summary>
+        </member>
+        <member name="M:Sandbox.Internal.EventSystem.RegisterAssembly(System.Reflection.Assembly)">
+            <summary>
+            Register an assembly. If old assembly is valid, we try to remove all of the old event hooks
+            from this assembly, while retaining a list of objects.
+            </summary>
+        </member>
+    </members>
+</doc>
